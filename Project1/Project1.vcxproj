@@ -128,13 +128,21 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="IO.cpp" />
+    <ClCompile Include="LinkedQueue.cpp" />
+    <ClCompile Include="Node.cpp" />
+    <ClCompile Include="PriorityQueue.cpp" />
     <ClCompile Include="process.cpp" />
+    <ClCompile Include="QueueADT.cpp" />
     <ClCompile Include="Scheduler.cpp" />
     <ClCompile Include="Source.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="IO.h" />
+    <ClInclude Include="LinkedQueue.h" />
+    <ClInclude Include="Node.h" />
+    <ClInclude Include="PriorityQueue.h" />
     <ClInclude Include="process.h" />
+    <ClInclude Include="QueueADT.h" />
     <ClInclude Include="Scheduler.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
