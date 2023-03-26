@@ -39,6 +39,9 @@
     <ClCompile Include="QueueADT.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Processor.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Scheduler.h">
@@ -60,6 +63,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="QueueADT.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Processor.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

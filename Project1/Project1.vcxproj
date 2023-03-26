@@ -132,6 +132,7 @@
     <ClCompile Include="Node.cpp" />
     <ClCompile Include="PriorityQueue.cpp" />
     <ClCompile Include="process.cpp" />
+    <ClCompile Include="Processor.cpp" />
     <ClCompile Include="QueueADT.cpp" />
     <ClCompile Include="Scheduler.cpp" />
     <ClCompile Include="Source.cpp" />
@@ -142,6 +143,7 @@
     <ClInclude Include="Node.h" />
     <ClInclude Include="PriorityQueue.h" />
     <ClInclude Include="process.h" />
+    <ClInclude Include="Processor.h" />
     <ClInclude Include="QueueADT.h" />
     <ClInclude Include="Scheduler.h" />
   </ItemGroup>
