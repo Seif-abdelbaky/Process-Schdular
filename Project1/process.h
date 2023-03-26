@@ -15,10 +15,82 @@ class Process
 	LinkedQueue <IO> IOs;
 public:
 	Process(int at, int pid, int ct, int IOn) {
-		ArrivalT = at;
+		setArrivalTime(at);
+		setPid(pid);
+		setCPUTime(ct);
+		setNumIOS(IOn);
+	}
+	void setPid(int pid)
+	{
 		Pid = pid;
-		cpuT = ct;
-		IO_n = IOn;
+	}
+	void setArrivalTime(int AT)
+	{
+		ArrivalT = AT;
+	}
+	void setResponseTime(int RT)
+	{
+		ResponseT = RT;
+	}
+	void setCPUTime(int CT)
+	{
+		cpuT = CT;
+	}
+	void setTerminationTime(int TT)
+	{
+		TerminationT = TT;
+	}
+	void setTurnAroundTime(int TRT)
+	{
+		TurnaroundDuration = TRT;
+	}
+	void setWaitingTime(int WT)
+	{
+		WaitingT = WT;
+	}
+	void setNumIOS(int IOS)
+	{
+		IO_n = IOS;
+	}
+	void setTimeLeft(int TL)
+	{
+		timeLeft = TL;
+	}
+	int getPid()
+	{
+		return Pid;
+	}
+	int getArrivalTime()
+	{
+		return ArrivalT;
+	}
+	int getResponseTime()
+	{
+		return ResponseT;
+	}
+	int getCPUTime()
+	{
+		return cpuT;
+	}
+	int getTerminationTime()
+	{
+		return TerminationT;
+	}
+	int getTurnRoundTime()
+	{
+		return TurnaroundDuration;
+	}
+	int getWaitingTime()
+	{
+		return WaitingT;
+	}
+	int getNumIOS()
+	{
+		return IO_n;
+	}
+	int getTimeLeft()
+	{
+		return timeLeft;
 	}
 };
 
