@@ -92,5 +92,21 @@ public:
 	{
 		return timeLeft;
 	}
+	void addIO(const IO& io)
+	{
+		IOs.enqueue(io);
+	}
+	IO* getIO()
+	{
+		IO ret;
+		IOs.dequeue(ret);
+		if (ret.isDone())
+			return nullptr;
+		IO back = ret;
+		back.setDone(true);
+		IOs.enqueue(back);
+		return &ret;
+
+	}
 };
 
