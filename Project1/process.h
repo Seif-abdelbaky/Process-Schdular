@@ -20,7 +20,10 @@ public:
 		setCPUTime(ct);
 		setNumIOS(IOn);
 	}
-	
+	bool operator > (Process B)
+	{
+		return cpuT > B.cpuT;
+	}
 	void setPid(int pid)
 	{
 		Pid = pid;
