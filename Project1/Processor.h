@@ -16,5 +16,10 @@ public:
 	void virtual setTimeLeftInQueue(int t) = 0;
 	int virtual getTimeLeftInQueue() = 0;
 	virtual QueueADT<Process>*  getReadyQ() = 0;
+	bool virtual AddtoQ(Process x)
+	{
+		TimeLeftInQueue += x.getCPUTime();
+		return(readyQ->enqueue(x));
+	}
 };
 
