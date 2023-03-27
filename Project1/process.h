@@ -14,12 +14,13 @@ class Process
 	int timeLeft;
 	LinkedQueue <IO> IOs;
 public:
-	Process(int at, int pid, int ct, int IOn) {
+	Process(int at=0, int pid=0, int ct=0, int IOn=0) {
 		setArrivalTime(at);
 		setPid(pid);
 		setCPUTime(ct);
 		setNumIOS(IOn);
 	}
+	
 	void setPid(int pid)
 	{
 		Pid = pid;

@@ -1,9 +1,12 @@
 #include<iostream>
 #include "LinkedQueue.h"
 #include "PriorityQueue.h"
+#include"FCFS.h"
 using namespace std;
 
 int main() {
+	FCFS x;
+	x.getReadyQ();
 	QueueADT <int>* ptr;
 	ptr = new PriorityQueue<int>;
 	PriorityQueue<int> test;

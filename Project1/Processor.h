@@ -3,6 +3,7 @@
 #include"process.h"
 class Processor
 {
+protected:
 	int TimeLeftInQueue;
 	Process* runPtr;
 	QueueADT<Process>* readyQ;
