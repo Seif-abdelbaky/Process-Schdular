@@ -18,8 +18,10 @@ public:
 	virtual QueueADT<Process>*  getReadyQ() = 0;
 	bool virtual AddtoQ(Process x)
 	{
-		TimeLeftInQueue += x.getCPUTime();
-		return(readyQ->enqueue(x));
+		bool flag = readyQ->enqueue(x);
+		if (flag)
+			TimeLeftInQueue += x.getCPUTime();
+		return(flag);
 	}
 };
 
