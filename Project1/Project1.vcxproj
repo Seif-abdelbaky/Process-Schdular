@@ -135,7 +135,9 @@
     <ClCompile Include="process.cpp" />
     <ClCompile Include="Processor.cpp" />
     <ClCompile Include="QueueADT.cpp" />
+    <ClCompile Include="RR.cpp" />
     <ClCompile Include="Scheduler.cpp" />
+    <ClCompile Include="SJF.cpp" />
     <ClCompile Include="Source.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -147,7 +149,9 @@
     <ClInclude Include="process.h" />
     <ClInclude Include="Processor.h" />
     <ClInclude Include="QueueADT.h" />
+    <ClInclude Include="RR.h" />
     <ClInclude Include="Scheduler.h" />
+    <ClInclude Include="SJF.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
