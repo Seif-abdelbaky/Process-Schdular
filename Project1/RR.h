@@ -29,9 +29,43 @@ public:
 	{
 		cout << "Hello world";
 	}
-	bool Run(Process* & pro)
+	bool Run(Process* & done,int TS)
 	{
-		cout << "Hello RR" << endl;
+		if (!busy && !readyQ->isEmpty())
+		{
+			readyQ->dequeue(runPtr);
+			busy = true;
+			runPtr->setResponseTime(TS);
+			runPtr->setWaitingTime(runPtr->getResponseTime() - runPtr->getArrivalTime());
+			
+		}
+		if (runPtr)
+		{
+			if (busy)
+			{
+				if (runPtr->getTimeLeft() > 0)
+				{
+					runPtr->setTimeLeft(runPtr->getTimeLeft() - 1);
+					if (runPtr->getTimeLeft() > 0 && TimeSlice != 0 && (TS - runPtr->getResponseTime()) % TimeSlice == 0 )
+					{
+						Process* temp = runPtr;
+						readyQ->enqueue(temp);
+						runPtr = nullptr;
+
+					}
+					return false;
+
+				}
+				else
+				{
+					busy = false;
+					done = runPtr;
+					runPtr->setTerminationTime(TS);
+					runPtr = nullptr;
+					return true;
+				}
+			}
+		}
 		return false;
 	}
 	void setBusy(bool b)

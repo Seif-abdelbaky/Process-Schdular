@@ -17,9 +17,35 @@ public:
 	{
 		cout << "Hello world";
 	}
-	bool Run(Process* & pro)
+	bool Run(Process* & done,int TS)
 	{
-		cout << "Hello SJF" << endl;
+		if (!busy && !readyQ->isEmpty())
+		{
+			readyQ->dequeue(runPtr);
+			busy = true;
+			runPtr->setResponseTime(TS);
+			runPtr->setWaitingTime(runPtr->getResponseTime() - runPtr->getArrivalTime());
+			
+		}
+		if (runPtr)
+		{
+			if (busy)
+			{
+				if (runPtr->getTimeLeft() > 0)
+				{
+					runPtr->setTimeLeft(runPtr->getTimeLeft() - 1);
+
+				}
+				else
+				{
+					busy = false;
+					done = runPtr;
+					runPtr->setTerminationTime(TS);
+					runPtr = nullptr;
+					return true;
+				}
+			}
+		}
 		return false;
 	}
 

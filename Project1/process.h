@@ -22,6 +22,7 @@ public:
 		setPid(pid);
 		setCPUTime(ct);
 		setNumIOS(IOn);
+		setTimeLeft(ct);
 		TimeDone = 0;
 	}
 	

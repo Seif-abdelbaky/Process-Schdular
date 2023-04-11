@@ -48,7 +48,7 @@ class Scheduler
 				processors[processorsCount++] = new SJF();
 			}
 			for (int i = 0; i < NR; i++) {
-				processors[processorsCount++] = new RR();
+				processors[processorsCount++] = new RR(RRtime);
 			}
 			cout << RRtime << endl;
 			cout << RTF << " " << MaxW << " " << STL << " " << fork << endl;
@@ -110,12 +110,15 @@ class Scheduler
 
 				for (int j = 0; j < TotalProcessors; j++) {
 					Process* pro;
-					cout << processors[j]->getTimeLeftInQueue() << " ";
-					bool done = processors[j]->Run(pro);
-					if (done) {
-						ProcessTer.enqueue(pro);
+					if (processors[j])
+					{
+						cout << processors[j]->getTimeLeftInQueue() << " ";
+						bool done = processors[j]->Run(pro, i);
+						if (done) {
+							ProcessTer.enqueue(pro);
+						}
+
 					}
-					
 				}
 				cout << endl;
 			}

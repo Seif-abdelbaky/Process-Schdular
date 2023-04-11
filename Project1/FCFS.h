@@ -17,25 +17,35 @@ public:
 	{
 		cout << "Hello world";
 	}
-	bool virtual Run(Process* & done) {
-		/*if (!busy) {
-			if (!readyQ->isEmpty()) {
-				readyQ->peek(*runPtr);
+	bool virtual Run(Process* & done,int TS) {
+
+		if (!busy && !readyQ->isEmpty())
+		{
+			readyQ->dequeue(runPtr);
+			busy = true;
+			runPtr->setResponseTime(TS);
+			runPtr->setWaitingTime(runPtr->getResponseTime() - runPtr->getArrivalTime());
+			
+		}
+		if (runPtr)
+		{
+			if (busy)
+			{
+				if (runPtr->getTimeLeft() > 0)
+				{
+					runPtr->setTimeLeft(runPtr->getTimeLeft() - 1);
+
+				}
+				else
+				{
+					busy = false;
+					done = runPtr;
+					runPtr->setTerminationTime(TS);
+					runPtr = nullptr;
+					return true;
+				}
 			}
 		}
-		if (busy) {
-			TimeLeftInQueue--;
-			int doneTime = runPtr->getDoneTime();
-			runPtr->setDoneTime(++doneTime);
-			int cpuTime = runPtr->getCPUTime();
-			if (doneTime == cpuTime) {
-				busy = false;
-				runPtr = nullptr;
-				readyQ->dequeue(done);
-				return true;
-			}
-		}*/
-		cout << "Hello FCFS" << endl;
 		return false;
 	}
 	void setBusy(bool b)
