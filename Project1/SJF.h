@@ -5,21 +5,24 @@
 using namespace std;
 class SJF : public Processor
 {
+public:
 	SJF()
 	{
 		TimeLeftInQueue = 0;
 		busy = false;
-		readyQ = new PriorityQueue<Process>;
+		readyQ = new PriorityQueue<Process*>;
 		runPtr = nullptr;
 	}
 	void ScheduleAlgo()
 	{
 		cout << "Hello world";
 	}
-	void Run()
+	bool Run(Process* & pro)
 	{
-		cout << "Hello world";
+		cout << "Hello SJF" << endl;
+		return false;
 	}
+
 	void setBusy(bool b)
 	{
 		busy = b;
@@ -37,7 +40,7 @@ class SJF : public Processor
 	{
 		return TimeLeftInQueue;
 	}
-	QueueADT<Process>* getReadyQ()
+	QueueADT<Process*>* getReadyQ()
 	{
 		return readyQ;
 	}

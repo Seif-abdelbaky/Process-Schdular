@@ -1,12 +1,15 @@
 #pragma once
 #include "LinkedQueue.h"
 #include "IO.h"
+#include<iostream>
+using namespace std;
 class Process
 {
 	int Pid;
 	int ArrivalT;
 	int ResponseT;
 	int cpuT;
+	int TimeDone;
 	int TerminationT;
 	int TurnaroundDuration;
 	int WaitingT;
@@ -19,7 +22,9 @@ public:
 		setPid(pid);
 		setCPUTime(ct);
 		setNumIOS(IOn);
+		TimeDone = 0;
 	}
+	
 	bool operator > (Process B)
 	{
 		return cpuT > B.cpuT;
@@ -59,6 +64,12 @@ public:
 	void setTimeLeft(int TL)
 	{
 		timeLeft = TL;
+	}
+	void setDoneTime(int DT) {
+		TimeDone = DT;
+	}
+	int getDoneTime() {
+		return TimeDone;
 	}
 	int getPid()
 	{
@@ -112,5 +123,9 @@ public:
 		return &ret;
 
 	}
+	void PrintAll() {
+		cout << "Arival: " << ArrivalT << ", PID: " << Pid << ", CPU Time: " << cpuT << ", IOs: " << IO_n<<endl;
+	}
+	
 };
 

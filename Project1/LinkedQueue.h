@@ -60,6 +60,7 @@ public :
 	bool enqueue(const T& newEntry);
 	bool dequeue(T& frntEntry);  
 	bool peek(T& frntEntry)  const;	
+	bool top(T* &frntPointer)  const;
 	~LinkedQueue();
 
 	//copy constructor
@@ -142,8 +143,6 @@ bool LinkedQueue<T>:: dequeue(T& frntEntry)
 	if (nodeToDeletePtr == backPtr)	 // Special case: last node in the queue
 		backPtr = nullptr ;	
 		
-	// Free memory reserved for the dequeued node
-	delete nodeToDeletePtr;
 
 	return true;
 
@@ -166,6 +165,8 @@ bool LinkedQueue<T>:: peek(T& frntEntry) const
 	return true;
 
 }
+
+
 ///////////////////////////////////////////////////////////////////////////////////
 /*
 Function: destructor

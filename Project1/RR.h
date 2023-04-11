@@ -13,7 +13,7 @@ public:
 	{
 		TimeLeftInQueue = 0;
 		busy = false;
-		readyQ = new PriorityQueue<Process>;
+		readyQ = new PriorityQueue<Process*>;
 		runPtr = nullptr;
 		TimeSlice = x;
 	}
@@ -29,9 +29,10 @@ public:
 	{
 		cout << "Hello world";
 	}
-	void Run()
+	bool Run(Process* & pro)
 	{
-		cout << "Hello world";
+		cout << "Hello RR" << endl;
+		return false;
 	}
 	void setBusy(bool b)
 	{
@@ -49,7 +50,7 @@ public:
 	{
 		return TimeLeftInQueue;
 	}
-	QueueADT<Process>* getReadyQ()
+	QueueADT<Process*>* getReadyQ()
 	{
 		return readyQ;
 	}

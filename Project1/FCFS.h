@@ -10,16 +10,33 @@ public:
 	{
 		TimeLeftInQueue = 0;
 		busy = false;
-		readyQ = new LinkedQueue<Process>;
+		readyQ = new LinkedQueue<Process*>;
 		runPtr = nullptr;
 	}
 	void ScheduleAlgo()
 	{
 		cout << "Hello world";
 	}
-	void Run()
-	{
-		cout << "Hello world";
+	bool virtual Run(Process* & done) {
+		/*if (!busy) {
+			if (!readyQ->isEmpty()) {
+				readyQ->peek(*runPtr);
+			}
+		}
+		if (busy) {
+			TimeLeftInQueue--;
+			int doneTime = runPtr->getDoneTime();
+			runPtr->setDoneTime(++doneTime);
+			int cpuTime = runPtr->getCPUTime();
+			if (doneTime == cpuTime) {
+				busy = false;
+				runPtr = nullptr;
+				readyQ->dequeue(done);
+				return true;
+			}
+		}*/
+		cout << "Hello FCFS" << endl;
+		return false;
 	}
 	void setBusy(bool b)
 	{
@@ -38,7 +55,7 @@ public:
 	{
 		return TimeLeftInQueue;
 	}
-	QueueADT<Process>* getReadyQ()
+	QueueADT<Process*>* getReadyQ()
 	{
 		return readyQ;
 	}
