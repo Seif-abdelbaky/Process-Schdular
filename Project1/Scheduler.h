@@ -31,7 +31,26 @@ class Scheduler
 		int TotalProcessors;
 		int currentProcessor = 0;
 	public:
-		
+		void runBLK()
+		{
+			if (!ProcessBlk.isEmpty())
+			{
+				Process* ptr;
+				ProcessBlk.peek(ptr);
+				int left = ptr->getnIO()->getTimeLeft();
+				ptr->getnIO()->setTimeLeft(left - 1);
+				if (left == 0)
+				{
+					cout << "IO DONE";
+					IO* ptrIO = ptr->getnIO();
+					ptr->setnIO(nullptr);
+					delete ptrIO;
+					ProcessBlk.dequeue(ptr);
+					///////////// should be changed with an algorithm
+					processors[0]->AddtoQ(ptr);
+				}
+			}
+		}
 		void LoadFile() {
 			string filename = "Input.txt";
 			ifstream inputFile(filename);
@@ -90,7 +109,7 @@ class Scheduler
 		}
 
 		void simulate() {
-			for (int i = 1; i <= 10; i++) {
+			for (int i = 1; i <= 100; i++) {
 				cout << i <<": " ;
 				Process* cur;
 				bool isNotEmpty= ProcessNew.peek(cur);
@@ -113,17 +132,22 @@ class Scheduler
 					if (processors[j])
 					{
 						cout << processors[j]->getTimeLeftInQueue() << " ";
-						bool done = processors[j]->Run(pro, i);
-						if (done) {
+						int done = processors[j]->Run(pro, i);
+						if (done == 1) {
 							ProcessTer.enqueue(pro);
+						}
+						else if (done == 2)
+						{
+
+							ProcessBlk.enqueue(pro);
 						}
 
 					}
 				}
+				runBLK();
 				cout << endl;
 			}
 
-			
 		}
 };
 

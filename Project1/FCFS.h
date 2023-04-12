@@ -17,7 +17,7 @@ public:
 	{
 		cout << "Hello world";
 	}
-	bool virtual Run(Process* & done,int TS) {
+	int virtual Run(Process* & done,int TS) {
 		if (!busy && !readyQ->isEmpty())
 		{
 			readyQ->dequeue(runPtr);
@@ -31,6 +31,21 @@ public:
 			runPtr->setWaitingTime(runPtr->getResponseTime() - runPtr->getArrivalTime());
 			if (busy)
 			{
+				if (runPtr->getnIO() == nullptr)
+				{
+					runPtr->getIO();
+
+				}
+				if (runPtr->getnIO() != nullptr && !runPtr->getnIO()->isDone())
+				{
+					if (runPtr->getnIO()->getArrival() == runPtr->getCPUTime() - runPtr->getTimeLeft())
+					{
+						busy = false;
+						done = runPtr;
+						runPtr = nullptr;
+						return 2;
+					}
+				}
 				if (runPtr->getTimeLeft() > 0)
 				{
 					runPtr->setTimeLeft(runPtr->getTimeLeft() - 1);
@@ -42,11 +57,11 @@ public:
 					done = runPtr;
 					runPtr->setTerminationTime(TS);
 					runPtr = nullptr;
-					return true;
+					return 1;
 				}
 			}
 		}
-		return false;
+		return 0;
 	}
 	void setBusy(bool b)
 	{

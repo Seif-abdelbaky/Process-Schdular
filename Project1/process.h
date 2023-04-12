@@ -16,6 +16,7 @@ class Process
 	int IO_n;
 	int timeLeft;
 	LinkedQueue <IO> IOs;
+	IO* nextIO;
 public:
 	Process(int at=0, int pid=0, int ct=0, int IOn=0) {
 		setArrivalTime(at);
@@ -24,8 +25,16 @@ public:
 		setNumIOS(IOn);
 		setTimeLeft(ct);
 		TimeDone = 0;
+		nextIO = nullptr;
 	}
-	
+	IO* getnIO()
+	{
+		return nextIO;
+	}
+	void setnIO(IO* a)
+	{
+		nextIO = a;
+	}
 	bool operator > (Process B)
 	{
 		return cpuT > B.cpuT;
@@ -112,16 +121,20 @@ public:
 	{
 		IOs.enqueue(io);
 	}
-	IO* getIO()
+	void getIO()
 	{
 		IO ret;
+		if (IOs.isEmpty())
+			return;
 		IOs.dequeue(ret);
 		if (ret.isDone())
-			return nullptr;
+			return;
 		IO back = ret;
+		nextIO = new IO(ret);
+	
 		back.setDone(true);
 		IOs.enqueue(back);
-		return &ret;
+		return;
 
 	}
 	void PrintAll() {

@@ -29,7 +29,7 @@ public:
 	{
 		cout << "Hello world";
 	}
-	bool Run(Process* & done,int TS)
+	int Run(Process* & done,int TS)
 	{
 		if (!busy && !readyQ->isEmpty())
 		{
@@ -46,6 +46,21 @@ public:
 			runPtr->setWaitingTime(runPtr->getResponseTime() - runPtr->getArrivalTime());
 			if (busy)
 			{
+				if (runPtr->getnIO() == nullptr)
+				{
+					runPtr->getIO();
+
+				}
+				if (runPtr->getnIO() != nullptr && !runPtr->getnIO()->isDone())
+				{
+					if (runPtr->getnIO()->getArrival() == runPtr->getCPUTime() - runPtr->getTimeLeft())
+					{
+						busy = false;
+						done = runPtr;
+						runPtr = nullptr;
+						return 2;
+					}
+				}
 				if (runPtr->getTimeLeft() > 0)
 				{
 					runPtr->setTimeLeft(runPtr->getTimeLeft() - 1);

@@ -10,7 +10,7 @@ protected:
 	bool busy;
 public:
 	void virtual ScheduleAlgo()=0;
-	bool virtual Run(Process* & done, int TS) = 0;
+	int virtual Run(Process* & done, int TS) = 0;
 	void virtual setBusy(bool b) = 0;
 	bool virtual isBusy() = 0;
 	void virtual setTimeLeftInQueue(int t) = 0;
