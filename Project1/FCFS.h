@@ -18,17 +18,17 @@ public:
 		cout << "Hello world";
 	}
 	bool virtual Run(Process* & done,int TS) {
-
 		if (!busy && !readyQ->isEmpty())
 		{
 			readyQ->dequeue(runPtr);
 			busy = true;
-			runPtr->setResponseTime(TS);
-			runPtr->setWaitingTime(runPtr->getResponseTime() - runPtr->getArrivalTime());
-			
 		}
 		if (runPtr)
 		{
+			if (TS < runPtr->getArrivalTime())
+				return false;
+			runPtr->setResponseTime(TS);
+			runPtr->setWaitingTime(runPtr->getResponseTime() - runPtr->getArrivalTime());
 			if (busy)
 			{
 				if (runPtr->getTimeLeft() > 0)
