@@ -140,6 +140,13 @@ public:
 	void PrintAll() {
 		cout << "Arival: " << ArrivalT << ", PID: " << Pid << ", CPU Time: " << cpuT << ", IOs: " << IO_n<<endl;
 	}
-	
+	friend ostream& operator << (ostream& out, Process* ptr)
+	{
+		
+		out << ptr->getPid();
+		return out;
+		
+	}
 };
+
 

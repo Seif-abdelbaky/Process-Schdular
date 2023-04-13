@@ -23,5 +23,8 @@ public:
 			TimeLeftInQueue += x->getCPUTime();
 		return(flag);
 	}
+	void virtual printRDY() = 0;
+	int virtual countRDY() = 0;
+	Process* getRun() { return runPtr; }
 };
 

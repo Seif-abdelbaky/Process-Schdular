@@ -1,4 +1,6 @@
-
+#include <iostream>
+#include <string>
+using namespace std;
 /*
 This is a program that implements the queue abstract data type using a linked list.
 The queue is implemented as a chain of linked nodes that has two pointers, 
@@ -65,6 +67,64 @@ public :
 
 	//copy constructor
 	LinkedQueue(const LinkedQueue<T> & LQ);
+	friend int count(LinkedQueue<T>& zis)
+	{
+		if (zis.isEmpty())
+			return 0;
+		LinkedQueue <T> temp;
+		int count = 0;
+		T x;
+		zis.dequeue(x);
+		temp.enqueue(x);
+		count++;
+		
+		while (!zis.isEmpty())
+		{
+			T x;
+			zis.dequeue(x);
+			temp.enqueue(x);
+			count++;
+
+			
+		}
+		while (!temp.isEmpty())
+		{
+			T x;
+			temp.dequeue(x);
+			zis.enqueue(x);
+		}
+		return count;
+
+	}
+	friend void print(LinkedQueue<T> & zis)
+	{
+		if (zis.isEmpty())
+		{
+			cout << endl;
+			return;
+		}
+		LinkedQueue <T> temp;
+		T x;
+		zis.dequeue(x);
+		temp.enqueue(x);
+		cout << x;
+		while (!zis.isEmpty())
+		{
+			T x;
+			zis.dequeue(x);
+			temp.enqueue(x);
+			cout << ", " << x;
+
+		}
+		while (!temp.isEmpty())
+		{
+			T x;
+			temp.dequeue(x);
+			zis.enqueue(x);
+		}
+		cout << endl;
+
+	}
 };
 /////////////////////////////////////////////////////////////////////////////////////////
 
