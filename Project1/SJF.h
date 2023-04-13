@@ -86,6 +86,64 @@ public:
 	{
 		return readyQ;
 	}
+	void printRDY()
+	{
+		cout << "[SJF ]: ";
+		cout << countRDY() << " RDY:";
+		LinkedQueue<Process*> temp;
+		if (readyQ->isEmpty())
+		{
+			cout << endl;
+			return;
+		}
+		Process* x;
+		readyQ->dequeue(x);
+		temp.enqueue(x);
+		cout << x;
+		while (!readyQ->isEmpty())
+		{
+			Process* x;
+			readyQ->dequeue(x);
+			temp.enqueue(x);
+			cout << ", " << x;
+
+		}
+		while (!temp.isEmpty())
+		{
+			Process* x;
+			temp.dequeue(x);
+			readyQ->enqueue(x);
+		}
+		cout << endl;
+	}
+	int countRDY()
+	{
+		int count = 0;
+		LinkedQueue<Process*> temp;
+		if (readyQ->isEmpty())
+		{
+			//cout << endl;
+			return 0;
+		}
+		Process* x;
+		readyQ->dequeue(x);
+		temp.enqueue(x);
+		count++;
+		while (!readyQ->isEmpty())
+		{
+			Process* x;
+			readyQ->dequeue(x);
+			temp.enqueue(x);
+			count++;
+		}
+		while (!temp.isEmpty())
+		{
+			Process* x;
+			temp.dequeue(x);
+			readyQ->enqueue(x);
+		}
+		return count;
+	}
 	~SJF()
 	{
 		delete readyQ;

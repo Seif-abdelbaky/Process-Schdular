@@ -9,8 +9,8 @@
 #include"RR.h"
 #include<fstream>
 #include<iostream>
+#include "UI.h"
 using namespace std;
-
 class Scheduler
 {
 	private:
@@ -30,7 +30,9 @@ class Scheduler
 		int processorsCount = 0;
 		int TotalProcessors;
 		int currentProcessor = 0;
+		UI tool;
 	public:
+
 		void runBLK()
 		{
 			if (!ProcessBlk.isEmpty())
@@ -41,7 +43,7 @@ class Scheduler
 				ptr->getnIO()->setTimeLeft(left - 1);
 				if (left == 0)
 				{
-					cout << "IO DONE";
+					//cout << "IO DONE";
 					IO* ptrIO = ptr->getnIO();
 					ptr->setnIO(nullptr);
 					delete ptrIO;
@@ -59,7 +61,7 @@ class Scheduler
 			inputFile >> RRtime;
 			inputFile >> RTF >> MaxW >> STL >> fork;
 			inputFile >> TotalProcess;
-			cout << NF << " " << NS << " " << NR<<endl;
+			//cout << NF << " " << NS << " " << NR<<endl;
 			for (int i = 0; i < NF; i++) {
 				processors[processorsCount++] = new FCFS();
 			}
@@ -69,16 +71,15 @@ class Scheduler
 			for (int i = 0; i < NR; i++) {
 				processors[processorsCount++] = new RR(RRtime);
 			}
-			cout << RRtime << endl;
-			cout << RTF << " " << MaxW << " " << STL << " " << fork << endl;
-			cout << TotalProcess << endl;
+			//cout << RRtime << endl;
+			//cout << RTF << " " << MaxW << " " << STL << " " << fork << endl;
+			//cout << TotalProcess << endl;
 			for (int i = 0; i < TotalProcess; i++) {
 				int AT, PID, CT, N;
 				inputFile >> AT >> PID >> CT >> N;
 				
 				Process* process=new Process(AT, PID, CT, N);
-				
-				process->PrintAll();
+				//process->PrintAll();
 				for (int i = 0; i < N; i++) {
 					char c;
 					inputFile >> c;
@@ -92,7 +93,7 @@ class Scheduler
 					}
 					IO io(r, d);
 					process->addIO(io);
-					cout << r << " " << d << endl;
+					//cout << r << " " << d << endl;
 				}
 				ProcessNew.enqueue(process);
 			}
@@ -109,8 +110,9 @@ class Scheduler
 		}
 
 		void simulate() {
-			for (int i = 1; i <= 100; i++) {
-				cout << i <<": " ;
+			
+			for (int i = 1;i < 100 ; i++) {
+				//cout << i <<": " ;
 				Process* cur;
 				bool isNotEmpty= ProcessNew.peek(cur);
 				while (isNotEmpty && cur->getArrivalTime() == i) {
@@ -131,7 +133,7 @@ class Scheduler
 					Process* pro;
 					if (processors[j])
 					{
-						cout << processors[j]->getTimeLeftInQueue() << " ";
+						//cout << processors[j]->getTimeLeftInQueue() << " ";
 						int done = processors[j]->Run(pro, i);
 						if (done == 1) {
 							ProcessTer.enqueue(pro);
@@ -145,7 +147,18 @@ class Scheduler
 					}
 				}
 				runBLK();
-				cout << endl;
+				tool.generate(i);
+				tool.printProcessors(processors, processorsCount);
+				tool.generateBLK(ProcessBlk);
+				tool.printRunning(processors, processorsCount);
+				tool.generateTRM(ProcessTer);
+
+				if (count(ProcessTer) == TotalProcess)
+				{
+					cout << "THE END! "<< endl;
+					break;
+				}
+				//tool.next();
 			}
 
 		}

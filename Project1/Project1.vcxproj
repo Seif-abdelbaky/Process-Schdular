@@ -139,6 +139,7 @@
     <ClCompile Include="Scheduler.cpp" />
     <ClCompile Include="SJF.cpp" />
     <ClCompile Include="Source.cpp" />
+    <ClCompile Include="UI.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="FCFS.h" />
@@ -152,6 +153,7 @@
     <ClInclude Include="RR.h" />
     <ClInclude Include="Scheduler.h" />
     <ClInclude Include="SJF.h" />
+    <ClInclude Include="UI.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
