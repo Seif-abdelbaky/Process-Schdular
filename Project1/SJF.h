@@ -23,13 +23,13 @@ public:
 		{
 			readyQ->dequeue(runPtr);
 			busy = true;
+			runPtr->setResponseTime(TS);
+			runPtr->setWaitingTime(runPtr->getResponseTime() - runPtr->getArrivalTime());
 		}
 		if (runPtr)
 		{
 			if (TS < runPtr->getArrivalTime())
 				return 0;
-			runPtr->setResponseTime(TS);
-			runPtr->setWaitingTime(runPtr->getResponseTime() - runPtr->getArrivalTime());
 			if (busy)
 			{
 				if (runPtr->getnIO() == nullptr)
