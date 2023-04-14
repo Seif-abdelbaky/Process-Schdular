@@ -111,7 +111,7 @@ class Scheduler
 
 		void simulate() {
 			
-			for (int i = 1;i < 1000 ; i++) {
+			for (int i = 1; ; i++) {
 				//cout << i <<": " ;
 				Process* cur;
 				bool isNotEmpty= ProcessNew.peek(cur);
@@ -158,7 +158,7 @@ class Scheduler
 					cout << "THE END! "<< endl;
 					break;
 				}
-				//tool.next();
+				tool.next();
 			}
 
 		}
