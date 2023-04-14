@@ -10,6 +10,8 @@
 #include<fstream>
 #include<iostream>
 #include "UI.h"
+#include <cstdlib>
+#include <time.h>
 using namespace std;
 class Scheduler
 {
@@ -39,6 +41,33 @@ class Scheduler
 			{
 				Process* ptr;
 				ProcessBlk.peek(ptr);
+				/////////// phase 1:
+				srand(time(0));
+				int prob = rand() % 100 + 1;
+				if (prob < 10)
+				{
+					ProcessBlk.dequeue(ptr);
+					///////////// throws the ptr to the queue with least time
+					int index = 0;
+					int min = processors[0]->getTimeLeftInQueue();
+					for (int j = 1; j < processorsCount; j++)
+					{
+						int temp = processors[j]->getTimeLeftInQueue();
+						if (temp < min)
+						{
+							min = temp;
+							index = j;
+						}
+					}
+					processors[index]->AddtoQ(ptr);
+					return;
+				}
+				else
+				{
+					return;
+				}
+
+				///////////phase 2
 				int left = ptr->getnIO()->getTimeLeft();
 				ptr->getnIO()->setTimeLeft(left - 1);
 				if (left == 0)
