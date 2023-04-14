@@ -42,7 +42,7 @@ class Scheduler
 				Process* ptr;
 				ProcessBlk.peek(ptr);
 				/////////// phase 1:
-				srand(time(0) % 10);
+				srand(time(0));
 				int prob = rand() % 100 + 1;
 				if (prob < 10)
 				{
@@ -198,7 +198,7 @@ class Scheduler
 					cout << "THE END! "<< endl;
 					break;
 				}
-				//tool.next();
+				tool.next();
 			}
 
 		}

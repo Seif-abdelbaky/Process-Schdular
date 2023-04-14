@@ -48,7 +48,7 @@ public:
 			if (busy)
 			{
 				////////////////////////// PHASE 1
-				srand(time(0) % 10);
+				srand(time(0));
 				int probability = rand() % 100 + 1;
 				if (probability <= 15 && probability >= 1)
 				{
