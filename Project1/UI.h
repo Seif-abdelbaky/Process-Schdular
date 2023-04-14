@@ -46,9 +46,16 @@ public:
 	}
 	void next()
 	{
-		cout << "PRESS ANY KEY TO MOVE TO NEXT STEP!";
-		char x;
-		cin >> x;
+		cout << "PRESS ANY KEY TO MOVE TO NEXT STEP!\n";
+		cin.clear(); //this will clear any values remain in cin from prior run
+		cin.ignore(1000000000, '\n');
+		//cin.get();
+		//system("PAUSE"); 
+		system("CLS"); //this will clear the screen of any text from prior run
+
+
+		
+	 // this ends your main function.
 		return;
 	}
 	void printProcessors(Processor** arr, int count)
