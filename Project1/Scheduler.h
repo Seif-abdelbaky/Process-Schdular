@@ -48,8 +48,19 @@ class Scheduler
 					ptr->setnIO(nullptr);
 					delete ptrIO;
 					ProcessBlk.dequeue(ptr);
-					///////////// should be changed with an algorithm
-					processors[0]->AddtoQ(ptr);
+					///////////// throws the ptr to the queue with least time
+					int index = 0;
+					int min = processors[0]->getTimeLeftInQueue();
+					for (int j = 1; j < processorsCount; j++)
+					{
+						int temp = processors[j]->getTimeLeftInQueue();
+						if (temp < min)
+						{
+							min = temp;
+							index = j;
+						}
+					}
+					processors[index]->AddtoQ(ptr);
 				}
 			}
 		}

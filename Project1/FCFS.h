@@ -47,10 +47,24 @@ public:
 						return 2;
 					}
 				}
+				runPtr->setTimeLeft(runPtr->getTimeLeft() - 1);
 				if (runPtr->getTimeLeft() > 0)
 				{
-					runPtr->setTimeLeft(runPtr->getTimeLeft() - 1);
 
+					if (runPtr->getnIO() == nullptr)
+					{
+						runPtr->getIO();
+					}
+					if (runPtr->getnIO() != nullptr && !runPtr->getnIO()->isDone())
+					{
+						if (runPtr->getnIO()->getArrival() == runPtr->getCPUTime() - runPtr->getTimeLeft())
+						{
+							busy = false;
+							done = runPtr;
+							runPtr = nullptr;
+							return 2;
+						}
+					}
 				}
 				else
 				{
@@ -77,10 +91,7 @@ public:
 	{
 		TimeLeftInQueue = t;
 	}
-	int  getTimeLeftInQueue()
-	{
-		return TimeLeftInQueue;
-	}
+
 	QueueADT<Process*>* getReadyQ()
 	{
 		return readyQ;
