@@ -111,7 +111,7 @@ class Scheduler
 
 		void simulate() {
 			
-			for (int i = 1;i < 100 ; i++) {
+			for (int i = 1;i < 1000 ; i++) {
 				//cout << i <<": " ;
 				Process* cur;
 				bool isNotEmpty= ProcessNew.peek(cur);

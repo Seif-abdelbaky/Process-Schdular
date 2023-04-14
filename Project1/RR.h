@@ -35,15 +35,15 @@ public:
 		{
 			readyQ->dequeue(runPtr);
 			busy = true;
-			
+			runPtr->setResponseTime(TS);
+			runPtr->setWaitingTime(runPtr->getResponseTime() - runPtr->getArrivalTime());
 			
 		}
 		if (runPtr)
 		{
 			if (TS < runPtr->getArrivalTime())
-				return false;
-			runPtr->setResponseTime(TS);
-			runPtr->setWaitingTime(runPtr->getResponseTime() - runPtr->getArrivalTime());
+				return 0;
+			
 			if (busy)
 			{
 				if (runPtr->getnIO() == nullptr)
@@ -69,9 +69,9 @@ public:
 						Process* temp = runPtr;
 						readyQ->enqueue(temp);
 						runPtr = nullptr;
-
+						busy = false;
 					}
-					return false;
+					
 
 				}
 				else
@@ -80,11 +80,12 @@ public:
 					done = runPtr;
 					runPtr->setTerminationTime(TS);
 					runPtr = nullptr;
-					return true;
+					return 1;
 				}
+				return 0;
 			}
 		}
-		return false;
+		return 0;
 	}
 	void setBusy(bool b)
 	{
