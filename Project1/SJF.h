@@ -2,6 +2,7 @@
 #include "Processor.h"
 #include "PriorityQueue.h"
 #include <iostream>
+#include <cstdlib>
 using namespace std;
 class SJF : public Processor
 {
@@ -28,6 +29,41 @@ public:
 		}
 		if (runPtr)
 		{
+			////////////////////////// PHASE 1
+			srand(time(0));
+			int probability = rand() % 100 + 1;
+			if (probability <= 15 && probability >= 1)
+			{
+				//// blk
+				busy = false;
+				done = runPtr;
+				runPtr = nullptr;
+				return 2;
+			}
+			else if (probability <= 30 && probability >= 20)
+			{
+				/////RDY
+				Process* temp = runPtr;
+				readyQ->enqueue(temp);
+				runPtr = nullptr;
+				busy = false;
+				return 0;
+			}
+			else if (probability <= 60 && probability >= 50)
+			{
+				//// trm
+				busy = false;
+				done = runPtr;
+				runPtr->setTerminationTime(TS);
+				runPtr = nullptr;
+				return 1;
+			}
+			else
+			{
+				/// continue
+				return 0;
+			}
+			/////////////////////PHASE 2
 			if (TS < runPtr->getArrivalTime())
 				return 0;
 			if (busy)
