@@ -42,7 +42,7 @@ public:
 		if (runPtr)
 		{
 			if (TS < runPtr->getArrivalTime())
-				return false;
+				return 0;
 			
 			if (busy)
 			{
@@ -71,7 +71,7 @@ public:
 						runPtr = nullptr;
 						busy = false;
 					}
-					return false;
+					
 
 				}
 				else
@@ -80,11 +80,12 @@ public:
 					done = runPtr;
 					runPtr->setTerminationTime(TS);
 					runPtr = nullptr;
-					return true;
+					return 1;
 				}
+				return 0;
 			}
 		}
-		return false;
+		return 0;
 	}
 	void setBusy(bool b)
 	{
