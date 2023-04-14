@@ -14,7 +14,36 @@ public:
 	void virtual setBusy(bool b) = 0;
 	bool virtual isBusy() = 0;
 	void virtual setTimeLeftInQueue(int t) = 0;
-	int virtual getTimeLeftInQueue() = 0;
+	int virtual getTimeLeftInQueue() 
+	{
+		int count = 0;
+		if (runPtr)
+			count += runPtr->getTimeLeft();
+		LinkedQueue<Process*> temp;
+		if (readyQ->isEmpty())
+		{
+			//cout << endl;
+			return count;
+		}
+		Process* x;
+		readyQ->dequeue(x);
+		temp.enqueue(x);
+		count += x->getTimeLeft();
+		while (!readyQ->isEmpty())
+		{
+			Process* x;
+			readyQ->dequeue(x);
+			temp.enqueue(x);
+			count += x->getTimeLeft();
+		}
+		while (!temp.isEmpty())
+		{
+			Process* x;
+			temp.dequeue(x);
+			readyQ->enqueue(x);
+		}
+		return count;
+	}
 	virtual QueueADT<Process*>*  getReadyQ() = 0;
 	bool virtual AddtoQ(Process* x)
 	{
