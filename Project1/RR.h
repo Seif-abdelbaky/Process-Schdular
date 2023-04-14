@@ -64,7 +64,7 @@ public:
 				if (runPtr->getTimeLeft() > 0)
 				{
 					runPtr->setTimeLeft(runPtr->getTimeLeft() - 1);
-					if (runPtr->getTimeLeft() > 0 && TimeSlice != 0 && (TS - runPtr->getResponseTime()) % TimeSlice == 0 )
+					if (runPtr->getTimeLeft() > 0 && TimeSlice != 0 && (TS - runPtr->getResponseTime()) % TimeSlice == 0 && TS!=runPtr->getResponseTime() )
 					{
 						Process* temp = runPtr;
 						readyQ->enqueue(temp);
