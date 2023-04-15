@@ -7,7 +7,7 @@
 using namespace std;
 
 int main() {
-	srand(time(0));	//// seed for phase 1 random generation
+	srand(time(0));
 	Scheduler scheduler;
 	scheduler.LoadFile();
 
