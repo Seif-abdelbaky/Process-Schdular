@@ -150,7 +150,7 @@ class Scheduler
 		}
 
 		void simulate() {
-			int Assassin = 1+rand()%TotalProcess;
+			int Assassin = 1 + rand() % TotalProcess;
 			for (int i = 1; ; i++) {
 				//cout << i <<": " ;
 				Process* cur;
