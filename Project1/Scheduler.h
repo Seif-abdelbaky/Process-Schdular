@@ -203,7 +203,7 @@ class Scheduler
 					cout << "THE END! "<< endl;
 					break;
 				}
-				//tool.next();
+				tool.next();
 			}
 
 		}
