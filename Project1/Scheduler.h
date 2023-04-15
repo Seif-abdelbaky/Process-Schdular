@@ -42,7 +42,7 @@ class Scheduler
 				Process* ptr;
 				ProcessBlk.peek(ptr);
 				/////////// phase 1:
-				srand(time(0) % 10);
+				/*srand(time(0) % 10);*/
 				int prob = rand() % 100 + 1;
 				if (prob < 10)
 				{
@@ -150,7 +150,7 @@ class Scheduler
 		}
 
 		void simulate() {
-			
+			int Assassin = 1+rand()%TotalProcess;
 			for (int i = 1; ; i++) {
 				//cout << i <<": " ;
 				Process* cur;
@@ -174,6 +174,11 @@ class Scheduler
 					if (processors[j])
 					{
 						//cout << processors[j]->getTimeLeftInQueue() << " ";
+						bool Killed = processors[j]->SigKill(pro, Assassin);
+						if (Killed)
+						{
+							ProcessTer.enqueue(pro);
+						}
 						int done = processors[j]->Run(pro, i);
 						if (done == 1) {
 							ProcessTer.enqueue(pro);

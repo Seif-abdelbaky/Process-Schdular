@@ -34,7 +34,7 @@ public:
 			if (busy)
 			{
 				////////////////////////// PHASE 1
-				srand(time(0) % 10);
+				/*srand(time(0) % 10);*/
 				int probability = rand() % 100 + 1;
 				if (probability <= 15 && probability >= 1)
 				{
@@ -189,6 +189,39 @@ public:
 			readyQ->enqueue(x);
 		}
 		return count;
+	}
+	bool SigKill(Process* & Killed, int idKilled)
+	{
+		Killed = nullptr;
+		if (runPtr && runPtr->getPid() == idKilled)
+		{
+			Killed = runPtr;
+			busy = false;
+			runPtr = nullptr;
+			return true;
+		}
+		LinkedQueue<Process*>Temp;
+		Process* TempPtr;
+		while (!readyQ->isEmpty())
+		{
+			readyQ->dequeue(TempPtr);
+			if (TempPtr->getPid() == idKilled)
+			{
+				Killed = TempPtr;
+			}
+			else
+			{
+				Temp.enqueue(TempPtr);
+			}
+		}
+		while (!Temp.isEmpty())
+		{
+			Temp.dequeue(TempPtr);
+			readyQ->enqueue(TempPtr);
+		}
+		if (Killed)
+			return true;
+		return false;
 	}
 	~FCFS()
 	{
