@@ -12,6 +12,8 @@
 #include "UI.h"
 #include <cstdlib>
 #include <time.h>
+#include"SignKill.h"
+#include<map>
 using namespace std;
 class Scheduler
 {
@@ -28,11 +30,13 @@ class Scheduler
 		LinkedQueue<Process*> ProcessNew;
 		LinkedQueue<Process*> ProcessTer;
 		LinkedQueue<Process*> ProcessBlk;
+		LinkedQueue<SignKill> ProcessKill;
 		Processor* processors[1000];
 		int processorsCount = 0;
 		int TotalProcessors;
 		int currentProcessor = 0;
 		UI tool;
+		map<int, int> processLocation;
 	public:
 
 		void runBLK()
@@ -60,6 +64,8 @@ class Scheduler
 						}
 					}
 					processors[index]->AddtoQ(ptr);
+					processLocation[ptr->getPid()] = index;
+
 					return;
 				}
 				else
@@ -90,6 +96,8 @@ class Scheduler
 						}
 					}
 					processors[index]->AddtoQ(ptr);
+					processLocation[ptr->getPid()] = index;
+
 				}
 			}
 		}
@@ -137,6 +145,14 @@ class Scheduler
 				}
 				ProcessNew.enqueue(process);
 			}
+			int PID, time;
+			while (inputFile >> PID) {
+				inputFile >> time;
+				SignKill kill;
+				kill.ID = PID;
+				kill.Time = time;
+				ProcessKill.enqueue(kill);
+			}
 		}
 
 		void SaveFile() {
@@ -161,6 +177,7 @@ class Scheduler
 					while (!flag) {
 						flag = processors[currentProcessor++]->AddtoQ(cur);
 					}
+					processLocation[cur->getPid()] = currentProcessor - 1;
 					if (currentProcessor == TotalProcessors) {
 						currentProcessor = 0;
 					}
@@ -174,11 +191,19 @@ class Scheduler
 					if (processors[j])
 					{
 						//cout << processors[j]->getTimeLeftInQueue() << " ";
-						bool Killed = processors[j]->SigKill(pro, Assassin);
-						if (Killed)
-						{
-							ProcessTer.enqueue(pro);
-						}
+						if (!ProcessKill.isEmpty()) {
+							SignKill kill;
+							ProcessKill.peek(kill);
+							if (kill.Time == i) {
+								bool Killed = processors[j]->SigKill(pro, kill.ID);
+								if (Killed)
+								{
+									//cout << "KILLED: " << kill.ID << endl;
+									ProcessTer.enqueue(pro);
+									ProcessKill.dequeue(kill);
+								}
+							}
+						}	
 						int done = processors[j]->Run(pro, i);
 						if (done == 1) {
 							ProcessTer.enqueue(pro);

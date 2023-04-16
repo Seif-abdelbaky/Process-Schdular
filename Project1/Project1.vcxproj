@@ -152,6 +152,7 @@
     <ClInclude Include="QueueADT.h" />
     <ClInclude Include="RR.h" />
     <ClInclude Include="Scheduler.h" />
+    <ClInclude Include="SignKill.h" />
     <ClInclude Include="SJF.h" />
     <ClInclude Include="UI.h" />
   </ItemGroup>
