@@ -146,12 +146,14 @@ class Scheduler
 				ProcessNew.enqueue(process);
 			}
 			int PID, time;
+			
 			while (inputFile >> PID) {
 				inputFile >> time;
 				SignKill kill;
 				kill.ID = PID;
 				kill.Time = time;
 				ProcessKill.enqueue(kill);
+				PID = 0;
 			}
 		}
 
@@ -191,19 +193,24 @@ class Scheduler
 					if (processors[j])
 					{
 						//cout << processors[j]->getTimeLeftInQueue() << " ";
+
 						if (!ProcessKill.isEmpty()) {
 							SignKill kill;
 							ProcessKill.peek(kill);
+							if (kill.Time < i) {
+								ProcessKill.dequeue(kill);
+								cout << "passed: " << kill.ID << endl;
+							}
 							if (kill.Time == i) {
 								bool Killed = processors[j]->SigKill(pro, kill.ID);
 								if (Killed)
 								{
-									//cout << "KILLED: " << kill.ID << endl;
+									cout << "KILLED: " << kill.ID << endl;
 									ProcessTer.enqueue(pro);
 									ProcessKill.dequeue(kill);
 								}
 							}
-						}	
+						}
 						int done = processors[j]->Run(pro, i);
 						if (done == 1) {
 							ProcessTer.enqueue(pro);
