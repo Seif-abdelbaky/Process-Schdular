@@ -204,13 +204,13 @@ class Scheduler
 			}
 			int PID, time;
 			
-			while (inputFile >> PID) {
-				inputFile >> time;
+			while (inputFile >> time) {
+				inputFile >> PID;
 				SignKill kill;
 				kill.ID = PID;
 				kill.Time = time;
 				ProcessKill.enqueue(kill);
-				PID = 0;
+				time = 0;
 			}
 		}
 
@@ -395,7 +395,7 @@ class Scheduler
 					cout << "Simulation ends, Output File Created" << endl;
 					return true;
 				}
-				//tool.next(mode);
+				tool.next(mode);
 			}
 			if (count(ProcessTer) == TotalProcess)
 			{
