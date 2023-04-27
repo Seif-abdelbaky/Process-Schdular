@@ -262,7 +262,7 @@ class Scheduler
 					bool flag = processors[index]->AddtoQ(cur);
 					/*while (!flag) {
 						flag = processors[currentProcessor++]->AddtoQ(cur);
-					}*/
+					}*/	
 					processLocation[cur->getPid()] = index;
 					/*if (currentProcessor == TotalProcessors) {
 						currentProcessor = 0;

@@ -27,6 +27,7 @@ public:
 		setNumIOS(IOn);
 		setTimeLeft(ct);
 		TimeDone = 0;
+		
 		nextIO = nullptr;
 		child = nullptr;
 		ischild = false;
@@ -49,7 +50,7 @@ public:
 	}
 	bool operator > (Process B)
 	{
-		return cpuT > B.cpuT;
+		return timeLeft > B.timeLeft;
 	}
 	void setPid(int pid)
 	{

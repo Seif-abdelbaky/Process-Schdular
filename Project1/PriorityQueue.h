@@ -86,7 +86,7 @@ public:
 		}
 		else
 		{
-			if (frontPtr->getItem() > newNodePtr->getItem())
+			if (*frontPtr->getItem() > *newNodePtr->getItem())
 			{
 				newNodePtr->setNext(frontPtr);
 				frontPtr = newNodePtr;
