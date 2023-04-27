@@ -317,11 +317,22 @@ class Scheduler
 						if (done == 1) {
 							ProcessTer.enqueue(pro);
 							bool HasChildren = pro->isParent();
-							while (pro && HasChildren)
+							bool cont = true;
+							while (pro && HasChildren && cont)
 							{
-								processors[j]->SigKill(pro, pro->getChild()->getPid(), HasChildren);
-								if(pro)
-									ProcessTer.enqueue(pro);
+								cont = false;
+								for (int z = 0; z < NF; z++)
+								{
+									Process* temp = pro;
+									processors[z]->SigKill(temp, temp->getChild()->getPid(), HasChildren);
+									if (temp)
+									{
+										ProcessTer.enqueue(temp);
+										cont = true;
+										pro = temp;
+										break;
+									}
+								}
 							}
 						}
 						else if (done == 2)
@@ -352,7 +363,7 @@ class Scheduler
 				cout << "THE END! " << endl;
 				return true;
 			}
-			tool.next();
+			//tool.next();
 			return false;
 		}
 };
