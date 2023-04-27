@@ -202,18 +202,35 @@ class Scheduler
 								cout << "passed: " << kill.ID << endl;
 							}
 							if (kill.Time == i) {
-								bool Killed = processors[j]->SigKill(pro, kill.ID);
+								bool hasChildren = false;
+								bool Killed = processors[j]->SigKill(pro, kill.ID,hasChildren);
 								if (Killed)
 								{
 									cout << "KILLED: " << kill.ID << endl;
 									ProcessTer.enqueue(pro);
 									ProcessKill.dequeue(kill);
 								}
+								while (pro && Killed && hasChildren)
+								{
+									Killed = processors[j]->SigKill(pro, pro->getChild()->getPid(), hasChildren);
+									if (Killed);
+									ProcessTer.enqueue(pro);
+								}
 							}
 						}
+						int fork_probability = 1+rand()%100;
+						if (fork_probability <= fork && processors[j]->fork(i))
+							TotalProcess++;
 						int done = processors[j]->Run(pro, i);
 						if (done == 1) {
 							ProcessTer.enqueue(pro);
+							bool HasChildren = pro->isParent();
+							while (pro && HasChildren)
+							{
+								processors[j]->SigKill(pro, pro->getChild()->getPid(), HasChildren);
+								if(pro)
+									ProcessTer.enqueue(pro);
+							}
 						}
 						else if (done == 2)
 						{

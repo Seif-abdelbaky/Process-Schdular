@@ -15,6 +15,7 @@ class Process
 	int WaitingT;
 	int IO_n;
 	int timeLeft;
+	Process* child;
 	LinkedQueue <IO> IOs;
 	IO* nextIO;
 public:
@@ -26,6 +27,7 @@ public:
 		setTimeLeft(ct);
 		TimeDone = 0;
 		nextIO = nullptr;
+		child = nullptr;
 	}
 	IO* getnIO()
 	{
@@ -146,6 +148,28 @@ public:
 		out << ptr->getPid();
 		return out;
 		
+	}
+	void ForkProcess(Process*& temp, int T)
+	{
+		if (!child)
+		{
+			child = new Process();
+			child->setTimeLeft(this->getTimeLeft() );
+			
+			child->setPid(this->getPid() + 1000000);
+			child->setArrivalTime(T);
+			temp = child;
+		}
+		else
+			temp = nullptr;
+	}
+	bool isParent()
+	{
+		return !(child==nullptr);
+	}
+	Process*& getChild()
+	{
+		return child;
 	}
 };
 
