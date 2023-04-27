@@ -395,7 +395,7 @@ class Scheduler
 					cout << "Simulation ends, Output File Created" << endl;
 					return true;
 				}
-				//tool.next(mode);
+				tool.next(mode);
 			}
 			if (count(ProcessTer) == TotalProcess)
 			{
