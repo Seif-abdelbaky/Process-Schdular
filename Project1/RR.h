@@ -228,7 +228,7 @@ public:
 	{
 		return false;
 	}
-	bool fork(int T)
+	bool fork(int T, Process*& forkPtr)
 	{
 		return false;
 	}

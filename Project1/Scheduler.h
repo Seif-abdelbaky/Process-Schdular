@@ -318,8 +318,13 @@ class Scheduler
 							}
 						}
 						int fork_probability = 1+rand()%100;
-						if (fork_probability <= fork && processors[j]->fork(i))
+						Process* forkPtr = nullptr;
+						if (fork_probability <= fork && processors[j]->fork(i, forkPtr))
+						{
+							int forkindex = get_min(0, NF);
+							processors[forkindex]->AddtoQ(forkPtr);
 							TotalProcess++;
+						}
 						int done = processors[j]->Run(pro, i);
 						if (done == 5)	/// Migration to SJF;
 						{
@@ -390,7 +395,7 @@ class Scheduler
 					cout << "Simulation ends, Output File Created" << endl;
 					return true;
 				}
-				tool.next(mode);
+				//tool.next(mode);
 			}
 			if (count(ProcessTer) == TotalProcess)
 			{

@@ -15,7 +15,7 @@ public:
 	bool virtual isBusy() = 0;
 	void virtual setTimeLeftInQueue(int t) = 0;
 	bool virtual SigKill(Process*& Killed, int idKilled,bool & hasChildren) = 0;
-	bool virtual fork(int T) = 0;
+	bool virtual fork(int T,Process*&forkPtr) = 0;
 	int virtual getTimeLeftInQueue() 
 	{
 		int count = 0;

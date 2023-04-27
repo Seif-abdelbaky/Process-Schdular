@@ -239,15 +239,15 @@ public:
 		}
 		return false;
 	}
-	bool fork(int T)
+	bool fork(int T,Process* &forkPtr)
 	{
 		if (runPtr)
 		{
-			Process* temp;
-			runPtr->ForkProcess(temp,T);
-			if (temp)
+			
+			runPtr->ForkProcess(forkPtr,T);
+			if (forkPtr)
 			{
-				readyQ->enqueue(temp);
+
 				return true;
 			}
 		}
