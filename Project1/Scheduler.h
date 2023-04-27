@@ -258,15 +258,15 @@ class Scheduler
 				Process* cur;
 				bool isNotEmpty= ProcessNew.peek(cur);
 				while (isNotEmpty && cur->getArrivalTime() == i) {
-
-					bool flag = processors[currentProcessor++]->AddtoQ(cur);
-					while (!flag) {
+					int index = get_min(0, TotalProcessors);
+					bool flag = processors[index]->AddtoQ(cur);
+					/*while (!flag) {
 						flag = processors[currentProcessor++]->AddtoQ(cur);
-					}
-					processLocation[cur->getPid()] = currentProcessor - 1;
-					if (currentProcessor == TotalProcessors) {
+					}*/
+					processLocation[cur->getPid()] = index;
+					/*if (currentProcessor == TotalProcessors) {
 						currentProcessor = 0;
-					}
+					}*/
 					
 					ProcessNew.dequeue(cur);
 					isNotEmpty = ProcessNew.peek(cur);
