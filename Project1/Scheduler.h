@@ -38,7 +38,36 @@ class Scheduler
 		UI tool;
 		map<int, int> processLocation;
 	public:
-
+		int get_min(int start, int end)
+		{
+			int index = start;
+			int min = processors[start]->getTimeLeftInQueue();
+			for (int j = start + 1; j < end; j++)
+			{
+				int temp = processors[j]->getTimeLeftInQueue();
+				if (temp < min)
+				{
+					min = temp;
+					index = j;
+				}
+			}
+			return index;
+		}
+		int get_max(int start, int end)
+		{
+			int index = start;
+			int max = processors[start]->getTimeLeftInQueue();
+			for (int j = start + 1; j < end; j++)
+			{
+				int temp = processors[j]->getTimeLeftInQueue();
+				if (temp > max)
+				{
+					max = temp;
+					index = j;
+				}
+			}
+			return index;
+		}
 		void runBLK()
 		{
 			if (!ProcessBlk.isEmpty())
@@ -47,31 +76,31 @@ class Scheduler
 				ProcessBlk.peek(ptr);
 				/////////// phase 1:
 				/*srand(time(0) % 10);*/
-				int prob = rand() % 100 + 1;
-				if (prob < 10)
-				{
-					ProcessBlk.dequeue(ptr);
-					///////////// throws the ptr to the queue with least time
-					int index = 0;
-					int min = processors[0]->getTimeLeftInQueue();
-					for (int j = 1; j < processorsCount; j++)
-					{
-						int temp = processors[j]->getTimeLeftInQueue();
-						if (temp < min)
-						{
-							min = temp;
-							index = j;
-						}
-					}
-					processors[index]->AddtoQ(ptr);
-					processLocation[ptr->getPid()] = index;
+				//int prob = rand() % 100 + 1;
+				//if (prob < 10)
+				//{
+				//	ProcessBlk.dequeue(ptr);
+				//	///////////// throws the ptr to the queue with least time
+				//	int index = 0;
+				//	int min = processors[0]->getTimeLeftInQueue();
+				//	for (int j = 1; j < processorsCount; j++)
+				//	{
+				//		int temp = processors[j]->getTimeLeftInQueue();
+				//		if (temp < min)
+				//		{
+				//			min = temp;
+				//			index = j;
+				//		}
+				//	}
+				//	processors[index]->AddtoQ(ptr);
+				//	processLocation[ptr->getPid()] = index;
 
-					return;
-				}
-				else
-				{
-					return;
-				}
+				//	return;
+				//}
+				//else
+				//{
+				//	return;
+				//}
 
 				///////////phase 2
 				int left = ptr->getnIO()->getTimeLeft();
@@ -84,17 +113,7 @@ class Scheduler
 					delete ptrIO;
 					ProcessBlk.dequeue(ptr);
 					///////////// throws the ptr to the queue with least time
-					int index = 0;
-					int min = processors[0]->getTimeLeftInQueue();
-					for (int j = 1; j < processorsCount; j++)
-					{
-						int temp = processors[j]->getTimeLeftInQueue();
-						if (temp < min)
-						{
-							min = temp;
-							index = j;
-						}
-					}
+					int index = get_min(0, processorsCount);
 					processors[index]->AddtoQ(ptr);
 					processLocation[ptr->getPid()] = index;
 
@@ -111,13 +130,13 @@ class Scheduler
 			inputFile >> TotalProcess;
 			//cout << NF << " " << NS << " " << NR<<endl;
 			for (int i = 0; i < NF; i++) {
-				processors[processorsCount++] = new FCFS();
+				processors[processorsCount++] = new FCFS(MaxW);
 			}
 			for (int i = 0; i < NS; i++) {
 				processors[processorsCount++] = new SJF();
 			}
 			for (int i = 0; i < NR; i++) {
-				processors[processorsCount++] = new RR(RRtime);
+				processors[processorsCount++] = new RR(RRtime, RTF);
 			}
 			//cout << RRtime << endl;
 			//cout << RTF << " " << MaxW << " " << STL << " " << fork << endl;
@@ -222,6 +241,24 @@ class Scheduler
 						if (fork_probability <= fork && processors[j]->fork(i))
 							TotalProcess++;
 						int done = processors[j]->Run(pro, i);
+						if (done == 5)	/// Migration to SJF;
+						{
+							do {
+								int index = get_min(NF, NF + NS);
+								processors[index]->AddtoQ(pro);
+								done = processors[j]->Run(pro, i);
+								cout << "MIGRATION TO SJF\n";
+							} while (done == 5);
+						}
+						if (done == 4)	/// Migration to RR;
+						{
+							do {
+								int index = get_min(NF + NS, processorsCount);
+								processors[index]->AddtoQ(pro);
+								done = processors[j]->Run(pro, i);
+								cout << "MIGRATION TO RR\n";
+							} while (done == 5);
+						}
 						if (done == 1) {
 							ProcessTer.enqueue(pro);
 							bool HasChildren = pro->isParent();
@@ -237,24 +274,31 @@ class Scheduler
 
 							ProcessBlk.enqueue(pro);
 						}
+						
 
 					}
 				}
 				runBLK();
-				tool.generate(i);
-				tool.printProcessors(processors, processorsCount);
-				tool.generateBLK(ProcessBlk);
-				tool.printRunning(processors, processorsCount);
-				tool.generateTRM(ProcessTer);
-
-				if (count(ProcessTer) == TotalProcess)
-				{
-					cout << "THE END! "<< endl;
+				if (updateInterface(i))
 					break;
-				}
-				tool.next();
 			}
 
+		}
+		bool updateInterface(int i)
+		{
+			tool.generate(i);
+			tool.printProcessors(processors, processorsCount);
+			tool.generateBLK(ProcessBlk);
+			tool.printRunning(processors, processorsCount);
+			tool.generateTRM(ProcessTer);
+
+			if (count(ProcessTer) == TotalProcess)
+			{
+				cout << "THE END! " << endl;
+				return true;
+			}
+			tool.next();
+			return false;
 		}
 };
 

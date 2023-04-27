@@ -18,6 +18,7 @@ class Process
 	Process* child;
 	LinkedQueue <IO> IOs;
 	IO* nextIO;
+	bool ischild;
 public:
 	Process(int at=0, int pid=0, int ct=0, int IOn=0) {
 		setArrivalTime(at);
@@ -28,6 +29,15 @@ public:
 		TimeDone = 0;
 		nextIO = nullptr;
 		child = nullptr;
+		ischild = false;
+	}
+	void set_child(bool x)
+	{
+		ischild = x;
+	}
+	bool isChild()
+	{
+		return ischild;
 	}
 	IO* getnIO()
 	{
@@ -159,6 +169,7 @@ public:
 			child->setPid(this->getPid() + 1000000);
 			child->setArrivalTime(T);
 			temp = child;
+			child->set_child(true);
 		}
 		else
 			temp = nullptr;

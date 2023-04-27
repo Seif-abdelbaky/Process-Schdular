@@ -8,15 +8,17 @@ class RR : public Processor
 {
 private :
 	int TimeSlice;
+	int RTF;
 public:
 
-	RR(int x = 0)
+	RR(int x, int y)
 	{
 		TimeLeftInQueue = 0;
 		busy = false;
 		readyQ = new PriorityQueue<Process*>;
 		runPtr = nullptr;
 		TimeSlice = x;
+		RTF = y;
 	}
 	void set_time(int x)
 	{
@@ -94,8 +96,15 @@ public:
 						busy = false;
 						done = runPtr;
 						runPtr = nullptr;
-						return 2;
+						return 2;		////// goes to block
 					}
+				}
+				if (runPtr->getTimeLeft() < RTF)
+				{
+					busy = false;
+					done = runPtr;
+					runPtr = nullptr;
+					return 5; ///// goes to shortest SJF Q
 				}
 				runPtr->setTimeLeft(runPtr->getTimeLeft() - 1);
 				if (runPtr->getTimeLeft() > 0)

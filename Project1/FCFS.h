@@ -6,13 +6,16 @@
 #include <cstdlib>
 class FCFS :public Processor
 {
+private: 
+	int MaxW;
 public:
-	FCFS()
+	FCFS(int x)
 	{
 		TimeLeftInQueue = 0;
 		busy = false;
 		readyQ = new LinkedQueue<Process*>;
 		runPtr = nullptr;
+		MaxW = x;
 	}
 	void ScheduleAlgo()
 	{
@@ -82,6 +85,13 @@ public:
 						runPtr = nullptr;
 						return 2;
 					}
+				}
+				if (runPtr ->getWaitingTime() > MaxW && !runPtr->isChild())
+				{
+					busy = false;
+					done = runPtr;
+					runPtr = nullptr;
+					return 4; ///// goes to shortest RR Q
 				}
 				runPtr->setTimeLeft(runPtr->getTimeLeft() - 1);
 				if (runPtr->getTimeLeft() > 0)
