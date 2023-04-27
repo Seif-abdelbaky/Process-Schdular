@@ -49,7 +49,7 @@ public:
 			{
 				////////////////////////// PHASE 1
 				/*srand(time(0) % 10);*/
-				int probability = rand() % 100 + 1;
+				/*int probability = rand() % 100 + 1;
 				if (probability <= 15 && probability >= 1)
 				{
 					//// blk
@@ -80,7 +80,7 @@ public:
 				{
 					/// continue
 					return 0;
-				}
+				}*/
 				/////////////////////PHASE 2
 				if (runPtr->getnIO() == nullptr)
 				{
@@ -214,7 +214,11 @@ public:
 		}
 		return count;
 	}
-	bool SigKill(Process* &Killed, int idKilled)
+	bool SigKill(Process* &Killed, int idKilled, bool& hasChildren)
+	{
+		return false;
+	}
+	bool fork(int T)
 	{
 		return false;
 	}
