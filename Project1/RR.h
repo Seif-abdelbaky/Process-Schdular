@@ -126,7 +126,7 @@ public:
 							return 2;
 						}
 					}
-					if (runPtr->getTimeLeft() > 0 && TimeSlice != 0 && (TS - runPtr->getResponseTime()) % TimeSlice == 0 && TS != runPtr->getResponseTime() )
+					if (runPtr->getTimeLeft() > 0 && TimeSlice != 0 && (TS + 1 - runPtr->getResponseTime()) % TimeSlice == 0 )
 					{
 						Process* temp = runPtr;
 						readyQ->enqueue(temp);
