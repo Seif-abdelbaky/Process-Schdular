@@ -25,7 +25,7 @@ public:
 			readyQ->dequeue(runPtr);
 			busy = true;
 			runPtr->setResponseTime(TS);
-			runPtr->setWaitingTime(runPtr->getResponseTime() - runPtr->getArrivalTime());
+			runPtr->setWaitingTime(TS - runPtr->getArrivalTime() + runPtr->getTimeLeft() - runPtr->getCPUTime());
 		}
 		if (runPtr)
 		{
