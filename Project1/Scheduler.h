@@ -27,6 +27,7 @@ class Scheduler
 		int STL;
 		int fork;
 		int TotalProcess;
+		int mode;
 		LinkedQueue<Process*> ProcessNew;
 		LinkedQueue<Process*> ProcessTer;
 		LinkedQueue<Process*> ProcessBlk;
@@ -38,6 +39,13 @@ class Scheduler
 		UI tool;
 		map<int, int> processLocation;
 	public:
+		void set_mode(int x)
+		{
+			if (x != 1 && x != 2)
+				x = 3;
+			mode = x;
+			system("CLS");
+		}
 		int get_min(int start, int end)
 		{
 			int index = start;
@@ -240,6 +248,8 @@ class Scheduler
 			}
 		}
 		void simulate() {
+			if (mode == 3)
+				tool.generate_silent();
 			int Assassin = 1 + rand() % TotalProcess;
 			for (int i = 1; ; i++) {
 				if (i % STL == 0)
@@ -367,18 +377,26 @@ class Scheduler
 		}
 		bool updateInterface(int i)
 		{
-			tool.generate(i);
-			tool.printProcessors(processors, processorsCount);
-			tool.generateBLK(ProcessBlk);
-			tool.printRunning(processors, processorsCount);
-			tool.generateTRM(ProcessTer);
+			if (mode != 3)
+			{
+				tool.generate(i);
+				tool.printProcessors(processors, processorsCount);
+				tool.generateBLK(ProcessBlk);
+				tool.printRunning(processors, processorsCount);
+				tool.generateTRM(ProcessTer);
 
+				if (count(ProcessTer) == TotalProcess)
+				{
+					cout << "Simulation ends, Output File Created" << endl;
+					return true;
+				}
+				tool.next(mode);
+			}
 			if (count(ProcessTer) == TotalProcess)
 			{
-				cout << "THE END! " << endl;
+				cout << "Simulation ends, Output File Created" << endl;
 				return true;
 			}
-			//tool.next();
 			return false;
 		}
 };

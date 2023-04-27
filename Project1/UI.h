@@ -5,6 +5,8 @@ using namespace std;
 #include"LinkedQueue.h"
 #include "process.h"
 #include "Processor.h"
+#include <Windows.h>
+#include <cstdlib>
 class UI
 {
 private: 
@@ -13,6 +15,10 @@ public:
 	UI(int x = 0)
 	{
 		timestep = x;
+	}
+	void generate_silent()
+	{
+		cout << "Silent Mode..........., Simulation Starts ..." << endl;
 	}
 	void generate(int x)
 	{
@@ -44,13 +50,20 @@ public:
 		print(queue);
 
 	}
-	void next()
+	void next(int mode)
 	{
-		cout << "PRESS ANY KEY TO MOVE TO NEXT STEP!\n";
-		cin.clear(); //this will clear any values remain in cin from prior run
-		cin.ignore(1000000000, '\n');
-		//cin.get();
-		//system("PAUSE"); 
+		if (mode == 1)
+		{
+			cout << "PRESS ANY KEY TO MOVE TO NEXT STEP!\n";
+			cin.clear(); //this will clear any values remain in cin from prior run
+			cin.ignore(1000000000, '\n');
+			//cin.get();
+			//system("PAUSE"); 
+		}
+		else
+		{
+			Sleep(1000);
+		}
 		system("CLS"); //this will clear the screen of any text from prior run
 
 
