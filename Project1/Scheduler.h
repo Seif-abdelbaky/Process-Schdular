@@ -68,6 +68,36 @@ class Scheduler
 			}
 			return index;
 		}
+		int get_min_ready(int start, int end)
+		{
+			int index = start;
+			int min = processors[start]->TimeLeftReady();
+			for (int j = start + 1; j < end; j++)
+			{
+				int temp = processors[j]->TimeLeftReady();
+				if (temp < min)
+				{
+					min = temp;
+					index = j;
+				}
+			}
+			return index;
+		}
+		int get_max_ready(int start, int end)
+		{
+			int index = start;
+			int max = processors[start]->TimeLeftReady();
+			for (int j = start + 1; j < end; j++)
+			{
+				int temp = processors[j]->TimeLeftReady();
+				if (temp > max)
+				{
+					max = temp;
+					index = j;
+				}
+			}
+			return index;
+		}
 		void runBLK()
 		{
 			if (!ProcessBlk.isEmpty())
@@ -185,10 +215,35 @@ class Scheduler
 
 			outputFile.close();
 		}
-
+		void steal()
+		{
+			bool NoNeed = false;
+			int min = get_min_ready(0, processorsCount);
+			int max = get_max_ready(0, processorsCount);
+			if (min < NF && max < NF)
+				NoNeed = true;
+			if (max >= NF)
+				NoNeed = true;
+			if (processors[max]->TimeLeftReady() == 0)
+				return;
+			float percentage = float(processors[max]->TimeLeftReady() - processors[min]->TimeLeftReady()) / float(processors[max]->TimeLeftReady());
+			while (percentage > 0.4)
+			{
+				Process* ptr = processors[max]->gimme_something(NoNeed);
+				if (ptr == nullptr)
+					break;
+				processors[min]->AddtoQ(ptr);
+				cout << "SOMETHING WAS STOLEN\n";
+				if (processors[max]->EmptyReady())
+					break;
+				percentage = float(processors[max]->TimeLeftReady() - processors[min]->TimeLeftReady()) / float(processors[max]->TimeLeftReady());
+			}
+		}
 		void simulate() {
 			int Assassin = 1 + rand() % TotalProcess;
 			for (int i = 1; ; i++) {
+				if (i % STL == 0)
+					steal();
 				//cout << i <<": " ;
 				Process* cur;
 				bool isNotEmpty= ProcessNew.peek(cur);
