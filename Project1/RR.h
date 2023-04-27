@@ -1,5 +1,6 @@
 #pragma once
 #include "Processor.h"
+#include"LinkedQueue.h"
 #include "PriorityQueue.h"
 #include <iostream>
 #include <cstdlib>
@@ -15,7 +16,7 @@ public:
 	{
 		TimeLeftInQueue = 0;
 		busy = false;
-		readyQ = new PriorityQueue<Process*>;
+		readyQ = new LinkedQueue<Process*>;
 		runPtr = nullptr;
 		TimeSlice = x;
 		RTF = y;

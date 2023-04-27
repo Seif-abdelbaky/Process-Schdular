@@ -277,18 +277,33 @@ class Scheduler
 							}
 							if (kill.Time == i) {
 								bool hasChildren = false;
-								bool Killed = processors[j]->SigKill(pro, kill.ID,hasChildren);
+								bool Killed = processors[j]->SigKill(pro, kill.ID, hasChildren);
 								if (Killed)
 								{
 									cout << "KILLED: " << kill.ID << endl;
 									ProcessTer.enqueue(pro);
 									ProcessKill.dequeue(kill);
 								}
-								while (pro && Killed && hasChildren)
+								if (pro)
 								{
-									Killed = processors[j]->SigKill(pro, pro->getChild()->getPid(), hasChildren);
-									if (Killed);
-									ProcessTer.enqueue(pro);
+									bool HasChildren = pro->isParent();
+									bool cont = true;
+									while (pro && HasChildren && cont)
+									{
+										cont = false;
+										for (int z = 0; z < NF; z++)
+										{
+											Process* temp = pro;
+											processors[z]->SigKill(temp, temp->getChild()->getPid(), HasChildren);
+											if (temp)
+											{
+												ProcessTer.enqueue(temp);
+												cont = true;
+												pro = temp;
+												break;
+											}
+										}
+									}
 								}
 							}
 						}
