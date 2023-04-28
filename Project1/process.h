@@ -27,7 +27,7 @@ public:
 		setNumIOS(IOn);
 		setTimeLeft(ct);
 		TimeDone = 0;
-		
+		ResponseT = -1;
 		nextIO = nullptr;
 		child = nullptr;
 		ischild = false;
@@ -62,7 +62,9 @@ public:
 	}
 	void setResponseTime(int RT)
 	{
+		if(ResponseT==-1)
 		ResponseT = RT;
+		return;
 	}
 	void setCPUTime(int CT)
 	{
@@ -104,6 +106,8 @@ public:
 	}
 	int getResponseTime()
 	{
+		if(ResponseT==-1)
+			return 0;
 		return ResponseT;
 	}
 	int getCPUTime()

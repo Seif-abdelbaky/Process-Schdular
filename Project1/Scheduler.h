@@ -291,6 +291,7 @@ class Scheduler
 								if (Killed)
 								{
 									cout << "KILLED: " << kill.ID << endl;
+									pro->setTerminationTime(i);
 									ProcessTer.enqueue(pro);
 									ProcessKill.dequeue(kill);
 								}
@@ -310,6 +311,7 @@ class Scheduler
 												ProcessTer.enqueue(temp);
 												cont = true;
 												pro = temp;
+												pro->setTerminationTime(i);
 												break;
 											}
 										}
@@ -360,6 +362,7 @@ class Scheduler
 										ProcessTer.enqueue(temp);
 										cont = true;
 										pro = temp;
+										pro->setTerminationTime(i);
 										break;
 									}
 								}
@@ -395,7 +398,7 @@ class Scheduler
 					cout << "Simulation ends, Output File Created" << endl;
 					return true;
 				}
-				tool.next(mode);
+				//tool.next(mode);
 			}
 			if (count(ProcessTer) == TotalProcess)
 			{
