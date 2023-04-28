@@ -19,6 +19,7 @@ class Process
 	LinkedQueue <IO> IOs;
 	IO* nextIO;
 	bool ischild;
+	int IO_D;
 public:
 	Process(int at=0, int pid=0, int ct=0, int IOn=0) {
 		setArrivalTime(at);
@@ -31,6 +32,15 @@ public:
 		nextIO = nullptr;
 		child = nullptr;
 		ischild = false;
+		IO_D = 0;
+	}
+	int get_io_d()
+	{
+		return IO_D;
+	}
+	void set_io_d(int x)
+	{
+		IO_D = x;
 	}
 	void set_child(bool x)
 	{

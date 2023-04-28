@@ -143,6 +143,7 @@ class Scheduler
 				///////////phase 2
 				int left = ptr->getnIO()->getTimeLeft();
 				ptr->getnIO()->setTimeLeft(left - 1);
+				ptr->set_io_d(ptr->get_io_d() + 1);
 				if (left == 0)
 				{
 					//cout << "IO DONE";
