@@ -342,7 +342,7 @@ class Scheduler
 								processors[index]->AddtoQ(pro);
 								done = processors[j]->Run(pro, i);
 								cout << "MIGRATION TO RR\n";
-							} while (done == 5);
+							} while (done == 4);
 						}
 						if (done == 1) {
 							ProcessTer.enqueue(pro);
