@@ -86,7 +86,7 @@ public:
 		}
 		else
 		{
-			if (frontPtr->getItem() > newNodePtr->getItem())
+			if (*frontPtr->getItem() > *newNodePtr->getItem())
 			{
 				newNodePtr->setNext(frontPtr);
 				frontPtr = newNodePtr;
@@ -97,7 +97,7 @@ public:
 				Node <T>* ptr = frontPtr;
 				while (ptr->getNext())
 				{
-					if (ptr->getNext()->getItem() > newNodePtr->getItem())
+					if (*ptr->getNext()->getItem() > *newNodePtr->getItem())
 					{
 						newNodePtr->setNext(ptr->getNext());
 						ptr->setNext(newNodePtr);
