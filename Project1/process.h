@@ -16,6 +16,7 @@ class Process
 	int IO_n;
 	int timeLeft;
 	Process* child;
+	Process* secondChild;
 	LinkedQueue <IO> IOs;
 	IO* nextIO;
 	bool ischild;
@@ -32,6 +33,7 @@ public:
 		ResponseT = -1;
 		nextIO = nullptr;
 		child = nullptr;
+		secondChild = nullptr;
 		ischild = false;
 		IO_D = 0;
 		to_block = 0;
@@ -190,26 +192,43 @@ public:
 	}
 	void ForkProcess(Process*& temp, int T)
 	{
-		if (!child)
+		if (!child || !secondChild)
 		{
-			child = new Process();
-			child->setTimeLeft(this->getTimeLeft() );
-			child->setCPUTime(this->getTimeLeft());
-			child->setPid(this->getPid() + 1000000);
-			child->setArrivalTime(T);
-			temp = child;
-			child->set_child(true);
+			if (!child)
+			{
+				child = new Process();
+				child->setTimeLeft(this->getTimeLeft());
+				child->setCPUTime(this->getTimeLeft());
+				child->setPid(this->getPid() + 100000);
+				child->setArrivalTime(T);
+				temp = child;
+				child->set_child(true);
+			}
+			else
+			{
+				secondChild = new Process();
+				secondChild->setTimeLeft(this->getTimeLeft());
+				secondChild->setCPUTime(this->getTimeLeft());
+				secondChild->setPid(this->getPid() + 1000000);
+				secondChild->setArrivalTime(T);
+				temp = secondChild;
+				secondChild->set_child(true);
+			}
 		}
 		else
 			temp = nullptr;
 	}
 	bool isParent()
 	{
-		return !(child==nullptr);
+		return !(child==nullptr) || !(secondChild==nullptr);
 	}
 	Process*& getChild()
 	{
 		return child;
+	}
+	Process*& getSecondChild()
+	{
+		return secondChild;
 	}
 };
 

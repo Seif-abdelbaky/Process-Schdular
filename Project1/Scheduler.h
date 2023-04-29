@@ -45,6 +45,28 @@ class Scheduler
 		UI tool;
 		map<int, int> processLocation;
 	public:
+		void killchildren(Process* subroot,int T)
+		{
+			if (!subroot)
+				return;
+			for (int z = 0; z < NF; z++)
+			{
+				bool HasChildren;
+				Process* temp = subroot;
+				processors[z]->SigKill(temp, subroot->getPid(), HasChildren);
+				if (temp)
+				{
+					ProcessTer.enqueue(temp);
+					subroot = temp;
+					subroot->setTerminationTime(T);
+					processKilled++;
+					break;
+				}
+			}
+			killchildren(subroot->getChild(),T);
+			killchildren(subroot->getSecondChild(),T);
+			
+		}
 		void set_mode(int x)
 		{
 			if (x != 1 && x != 2)
@@ -324,7 +346,7 @@ class Scheduler
 					ProcessNew.dequeue(cur);
 					isNotEmpty = ProcessNew.peek(cur);
 				}
-
+				
 				for (int j = 0; j < TotalProcessors; j++) {
 					Process* pro;
 					if (processors[j])
@@ -351,26 +373,7 @@ class Scheduler
 								}
 								if (pro)
 								{
-									bool HasChildren = pro->isParent();
-									bool cont = true;
-									while (pro && HasChildren && cont)
-									{
-										cont = false;
-										for (int z = 0; z < NF; z++)
-										{
-											Process* temp = pro;
-											processors[z]->SigKill(temp, temp->getChild()->getPid(), HasChildren);
-											if (temp)
-											{
-												ProcessTer.enqueue(temp);
-												cont = true;
-												pro = temp;
-												pro->setTerminationTime(i);
-												processKilled++;
-												break;
-											}
-										}
-									}
+									killchildren(pro, i);
 								}
 							}
 						}
@@ -407,25 +410,8 @@ class Scheduler
 						if (done == 1) {
 							ProcessTer.enqueue(pro);
 							bool HasChildren = pro->isParent();
-							bool cont = true;
-							while (pro && HasChildren && cont)
-							{
-								cont = false;
-								for (int z = 0; z < NF; z++)
-								{
-									Process* temp = pro;
-									processors[z]->SigKill(temp, temp->getChild()->getPid(), HasChildren);
-									if (temp)
-									{
-										ProcessTer.enqueue(temp);
-										cont = true;
-										pro = temp;
-										pro->setTerminationTime(i+1);
-										processKilled++;
-										break;
-									}
-								}
-							}
+							if (HasChildren)
+								killchildren(pro, i+1);
 						}
 						else if (done == 2)
 						{
