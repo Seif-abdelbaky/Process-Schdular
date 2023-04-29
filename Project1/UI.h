@@ -77,8 +77,11 @@ public:
 		
 		for (int i = 0;i < count; i++)
 		{
-			cout << "processor " << i + 1 << " ";
-			arr[i]->printRDY();
+			if (!arr[i]->isHeated())
+			{
+				cout << "processor " << i + 1 << " ";
+				arr[i]->printRDY();
+			}
 		}
 	}
 	void printRunning(Processor** arr, int count)
