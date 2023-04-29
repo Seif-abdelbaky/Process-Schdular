@@ -86,7 +86,7 @@ public:
 						return 2;
 					}
 				}
-				if (runPtr ->getWaitingTime() > MaxW && !runPtr->isChild())
+				if (runPtr ->get_WaitingTime() > MaxW && !runPtr->isChild())
 				{
 					busy = false;
 					done = runPtr;

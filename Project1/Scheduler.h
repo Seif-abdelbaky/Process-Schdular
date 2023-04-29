@@ -233,7 +233,7 @@ class Scheduler
 			while (!ProcessTer.isEmpty()) {
 				Process* pro;
 				ProcessTer.dequeue(pro);
-				totalWaiting += pro->getWaitingTime();
+				totalWaiting += pro->calcWaitingTime();
 				totalRespone += pro->getResponseTime();
 				totalTurnRound += pro->getTurnRoundTime();
 				out << pro->getTerminationTime() << "  "
@@ -241,7 +241,7 @@ class Scheduler
 					<< pro->getArrivalTime() << "  "
 					<< pro->getCPUTime() << "  "
 					<< pro->get_io_d() << "    "
-					<< pro->getWaitingTime() << "  "
+					<< pro->calcWaitingTime() << "  "
 					<< pro->getResponseTime() << "  "
 					<< pro->getTurnRoundTime() << "\n";
 			}
@@ -264,7 +264,7 @@ class Scheduler
 				out << "p" << (i + 1) << "=" << processors[i]->getTotalBusy() * 100 / totalTurnRound<<"%,  ";
 			}
 			out << "\n \n";
-			out << "Proxessors Utiliz\n";
+			out << "Processors Utiliz\n";
 			int TotalUtilization = 0;
 			for (int i = 0; i < TotalProcessors; i++) {
 				TotalUtilization += processors[i]->getTotalBusy() * 100 / TotalTime;

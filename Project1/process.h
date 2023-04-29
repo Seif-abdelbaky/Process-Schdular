@@ -142,7 +142,11 @@ public:
 	{
 		return TerminationT - ArrivalT;
 	}
-	int getWaitingTime()
+	int get_WaitingTime()
+	{
+		return WaitingT;
+	}
+	int calcWaitingTime()
 	{
 		return TerminationT - ArrivalT - cpuT + timeLeft;
 	}
