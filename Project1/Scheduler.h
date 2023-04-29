@@ -144,7 +144,7 @@ class Scheduler
 				int left = ptr->getnIO()->getTimeLeft();
 				ptr->getnIO()->setTimeLeft(left - 1);
 				ptr->set_io_d(ptr->get_io_d() + 1);
-				if (left == 0)
+				if (left - 1 == 0)
 				{
 					//cout << "IO DONE";
 					IO* ptrIO = ptr->getnIO();
@@ -399,7 +399,7 @@ class Scheduler
 					cout << "Simulation ends, Output File Created" << endl;
 					return true;
 				}
-				//tool.next(mode);
+				tool.next(mode);
 			}
 			if (count(ProcessTer) == TotalProcess)
 			{
