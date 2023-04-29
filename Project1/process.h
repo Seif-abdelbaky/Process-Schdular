@@ -20,6 +20,7 @@ class Process
 	IO* nextIO;
 	bool ischild;
 	int IO_D;
+	int to_block;
 public:
 	Process(int at=0, int pid=0, int ct=0, int IOn=0) {
 		setArrivalTime(at);
@@ -33,6 +34,15 @@ public:
 		child = nullptr;
 		ischild = false;
 		IO_D = 0;
+		to_block = 0;
+	}
+	int get_to_block()
+	{
+		return to_block;
+	}
+	void set_blk(int x)
+	{
+		to_block = x;
 	}
 	int get_io_d()
 	{
