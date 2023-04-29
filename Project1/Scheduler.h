@@ -388,15 +388,15 @@ class Scheduler
 							processForked++;
 						}
 						int overheating_prob = 1 + rand() % 100;
-						if (overheating_prob < 2)
+						if (overheating_prob < 2 && !processors[j]->isHeated())
 						{
 							int counter = 0;
 							if (j < NF)
 							{
 								
-								for (int i = 0; i < NF; i++)
+								for (int ii = 0; ii < NF; ii++)
 								{
-									if (processors[i]->isHeated())
+									if (processors[ii]->isHeated())
 										counter++;
 								}
 								
