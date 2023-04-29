@@ -7,12 +7,13 @@ using namespace std;
 class SJF : public Processor
 {
 public:
-	SJF()
+	SJF(int T)
 	{
 		TimeLeftInQueue = 0;
 		busy = false;
 		readyQ = new PriorityQueue<Process*>;
 		runPtr = nullptr;
+		CoolingT = T;
 	}
 	void ScheduleAlgo()
 	{
@@ -20,6 +21,17 @@ public:
 	}
 	int Run(Process* & done,int TS)
 	{
+		if (overHeated)
+		{
+			waiting++;
+			if (waiting >= CoolingT)
+			{
+				cout << "COOOOOOLED" << endl;
+				overHeated = false;
+				waiting = 0;
+			}
+			return 0;
+		}
 		if (!busy && !readyQ->isEmpty())
 		{
 			readyQ->dequeue(runPtr);

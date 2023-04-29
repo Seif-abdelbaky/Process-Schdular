@@ -9,19 +9,31 @@ class FCFS :public Processor
 private: 
 	int MaxW;
 public:
-	FCFS(int x)
+	FCFS(int x, int T)
 	{
 		TimeLeftInQueue = 0;
 		busy = false;
 		readyQ = new LinkedQueue<Process*>;
 		runPtr = nullptr;
 		MaxW = x;
+		CoolingT = T;
 	}
 	void ScheduleAlgo()
 	{
 		cout << "Hello world";
 	}
 	int virtual Run(Process* & done,int TS) {
+		if (overHeated)
+		{
+			waiting++;
+			if (waiting >= CoolingT)
+			{
+				cout << "COOOOOOLED" << endl;
+				overHeated = false;
+				waiting = 0;
+			}
+			return 0;
+		}
 		if (!busy && !readyQ->isEmpty())
 		{
 			readyQ->dequeue(runPtr);
@@ -218,7 +230,7 @@ public:
 		while (!readyQ->isEmpty())
 		{
 			readyQ->dequeue(TempPtr);
-			if (TempPtr->getPid() == idKilled)
+			if (TempPtr->getPid() == idKilled && Killed == nullptr)
 			{
 				Killed = TempPtr;
 			}

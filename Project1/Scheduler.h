@@ -34,6 +34,7 @@ class Scheduler
 		int processForked = 0;
 		int processKilled = 0;
 		int TotalTime = 0;
+		int CoolingTime = 0;
 		LinkedQueue<Process*> ProcessNew;
 		LinkedQueue<Process*> ProcessTer;
 		LinkedQueue<Process*> ProcessBlk;
@@ -81,7 +82,7 @@ class Scheduler
 			for (int j = start + 1; j < end; j++)
 			{
 				int temp = processors[j]->getTimeLeftInQueue();
-				if (temp < min)
+				if ((temp < min || processors[index]->isHeated()) && !processors[j]->isHeated())
 				{
 					min = temp;
 					index = j;
@@ -96,7 +97,7 @@ class Scheduler
 			for (int j = start + 1; j < end; j++)
 			{
 				int temp = processors[j]->getTimeLeftInQueue();
-				if (temp > max)
+				if ((temp > max|| processors[index]->isHeated()) && !processors[j]->isHeated())
 				{
 					max = temp;
 					index = j;
@@ -111,7 +112,7 @@ class Scheduler
 			for (int j = start + 1; j < end; j++)
 			{
 				int temp = processors[j]->TimeLeftReady();
-				if (temp < min)
+				if ((temp < min || processors[index]->isHeated()) && !processors[j]->isHeated())
 				{
 					min = temp;
 					index = j;
@@ -126,7 +127,7 @@ class Scheduler
 			for (int j = start + 1; j < end; j++)
 			{
 				int temp = processors[j]->TimeLeftReady();
-				if (temp > max)
+				if ((temp > max || processors[index]->isHeated()) && !processors[j]->isHeated())
 				{
 					max = temp;
 					index = j;
@@ -195,17 +196,17 @@ class Scheduler
 			inputFile >> NF >> NS >> NR;
 			TotalProcessors = NF + NS + NR;
 			inputFile >> RRtime;
-			inputFile >> RTF >> MaxW >> STL >> fork;
+			inputFile >> RTF >> MaxW >> STL >> fork >> CoolingTime;
 			inputFile >> TotalProcess;
 			//cout << NF << " " << NS << " " << NR<<endl;
 			for (int i = 0; i < NF; i++) {
-				processors[processorsCount++] = new FCFS(MaxW);
+				processors[processorsCount++] = new FCFS(MaxW, CoolingTime);
 			}
 			for (int i = 0; i < NS; i++) {
-				processors[processorsCount++] = new SJF();
+				processors[processorsCount++] = new SJF(CoolingTime);
 			}
 			for (int i = 0; i < NR; i++) {
-				processors[processorsCount++] = new RR(RRtime, RTF);
+				processors[processorsCount++] = new RR(RRtime, RTF, CoolingTime);
 			}
 			//cout << RRtime << endl;
 			//cout << RTF << " " << MaxW << " " << STL << " " << fork << endl;
@@ -385,6 +386,61 @@ class Scheduler
 							processors[forkindex]->AddtoQ(forkPtr);
 							TotalProcess++;
 							processForked++;
+						}
+						int overheating_prob = 1 + rand() % 100;
+						if (overheating_prob < 2)
+						{
+							int counter = 0;
+							if (j < NF)
+							{
+								
+								for (int i = 0; i < NF; i++)
+								{
+									if (processors[i]->isHeated())
+										counter++;
+								}
+								
+							}
+							if (j >= NF || counter < NF - 1)
+							{
+								cout << "OVERHEATED << " << j + 1 << endl;
+								Process* temp = nullptr;
+								processors[j]->overHeat(temp);
+								if (temp != nullptr)
+								{
+									if (temp->isChild())
+									{
+										int index = get_min(0, NF);
+										processors[index]->AddtoQ(temp);
+									}
+									else
+									{
+										int index = get_min(0, processorsCount);
+										processors[index]->AddtoQ(temp);
+									}
+								}
+
+								while (!processors[j]->EmptyReady())
+								{
+									Process* temp;
+									temp = processors[j]->gimme_something(true);
+									if (temp != nullptr)
+									{
+										if (temp->isChild())
+										{
+											int index = get_min(0, NF);
+											processors[index]->AddtoQ(temp);
+										}
+										else
+										{
+											int index = get_min(0, processorsCount);
+											processors[index]->AddtoQ(temp);
+										}
+									}
+								}
+							
+							}
+							
 						}
 						int done = processors[j]->Run(pro, i);
 						if (done == 5)	/// Migration to SJF;

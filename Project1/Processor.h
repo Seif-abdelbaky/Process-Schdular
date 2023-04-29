@@ -9,7 +9,25 @@ protected:
 	QueueADT<Process*>* readyQ;
 	bool busy;
 	int TotalBusy = 0;
+	int CoolingT;
+	bool overHeated = false;
+	int waiting = 0;
 public:
+	void overHeat(Process* & temp)
+	{
+		overHeated = true;
+		waiting = 0;
+		if (busy)
+		{
+			busy = false;
+			temp = runPtr;
+			runPtr = nullptr;
+		}
+	}
+	bool isHeated()
+	{
+		return overHeated;
+	}
 	void virtual ScheduleAlgo()=0;
 	int virtual Run(Process* & done, int TS) = 0;
 	void virtual setBusy(bool b) = 0;

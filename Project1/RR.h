@@ -12,7 +12,7 @@ private :
 	int RTF;
 public:
 
-	RR(int x, int y)
+	RR(int x, int y, int T)
 	{
 		TimeLeftInQueue = 0;
 		busy = false;
@@ -20,6 +20,7 @@ public:
 		runPtr = nullptr;
 		TimeSlice = x;
 		RTF = y;
+		CoolingT = T;
 	}
 	void set_time(int x)
 	{
@@ -35,7 +36,17 @@ public:
 	}
 	int Run(Process* & done,int TS)
 	{
-		
+		if (overHeated)
+		{
+			waiting++;
+			if (waiting >= CoolingT)
+			{
+				cout << "COOOOOOLED" << endl;
+				overHeated = false;
+				waiting = 0;
+			}
+			return 0;
+		}
 		if (!busy && !readyQ->isEmpty())
 		{
 			readyQ->dequeue(runPtr);
