@@ -106,7 +106,7 @@ class Scheduler
 			}
 			return index;
 		}
-		void runBLK()
+		void runBLK(int timestep)
 		{
 			if (!ProcessBlk.isEmpty())
 			{
@@ -141,6 +141,8 @@ class Scheduler
 				//}
 
 				///////////phase 2
+				if (ptr->get_to_block() == timestep)	// just arrived
+					return;
 				int left = ptr->getnIO()->getTimeLeft();
 				ptr->getnIO()->setTimeLeft(left - 1);
 				ptr->set_io_d(ptr->get_io_d() + 1);
@@ -371,14 +373,14 @@ class Scheduler
 						}
 						else if (done == 2)
 						{
-
+							pro->set_blk(i);
 							ProcessBlk.enqueue(pro);
 						}
 						
 
 					}
 				}
-				runBLK();
+				runBLK(i);
 				if (updateInterface(i))
 					break;
 			}
