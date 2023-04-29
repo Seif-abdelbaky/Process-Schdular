@@ -35,6 +35,7 @@ public:
 	}
 	int Run(Process* & done,int TS)
 	{
+		
 		if (!busy && !readyQ->isEmpty())
 		{
 			readyQ->dequeue(runPtr);
@@ -107,6 +108,7 @@ public:
 					runPtr = nullptr;
 					return 5; ///// goes to shortest SJF Q
 				}
+				TotalBusy++;
 				runPtr->setTimeLeft(runPtr->getTimeLeft() - 1);
 				if (runPtr->getTimeLeft() > 0)
 				{
@@ -140,7 +142,7 @@ public:
 				{
 					busy = false;
 					done = runPtr;
-					runPtr->setTerminationTime(TS);
+					runPtr->setTerminationTime(TS+1);
 					runPtr = nullptr;
 					return 1;
 				}

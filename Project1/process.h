@@ -130,11 +130,11 @@ public:
 	}
 	int getTurnRoundTime()
 	{
-		return TurnaroundDuration;
+		return TerminationT - ArrivalT;
 	}
 	int getWaitingTime()
 	{
-		return WaitingT;
+		return TerminationT - ArrivalT - cpuT + timeLeft;
 	}
 	int getNumIOS()
 	{

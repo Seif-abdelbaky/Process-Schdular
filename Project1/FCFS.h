@@ -93,6 +93,7 @@ public:
 					runPtr = nullptr;
 					return 4; ///// goes to shortest RR Q
 				}
+				TotalBusy++;
 				runPtr->setTimeLeft(runPtr->getTimeLeft() - 1);
 				if (runPtr->getTimeLeft() > 0)
 				{
@@ -116,7 +117,7 @@ public:
 				{
 					busy = false;
 					done = runPtr;
-					runPtr->setTerminationTime(TS);
+					runPtr->setTerminationTime(TS+1);
 					runPtr = nullptr;
 					return 1;
 				}

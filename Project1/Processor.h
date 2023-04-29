@@ -8,6 +8,7 @@ protected:
 	Process* runPtr;
 	QueueADT<Process*>* readyQ;
 	bool busy;
+	int TotalBusy = 0;
 public:
 	void virtual ScheduleAlgo()=0;
 	int virtual Run(Process* & done, int TS) = 0;
@@ -104,6 +105,9 @@ public:
 	int TimeLeftReady()
 	{
 		return getTimeLeftInQueue() - TimeLeftRunPtr();
+	}
+	int getTotalBusy() {
+		return TotalBusy;
 	}
 };
 

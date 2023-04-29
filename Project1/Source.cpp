@@ -18,6 +18,6 @@ int main() {
 	Scheduler scheduler;
 	scheduler.set_mode(mode);
 	scheduler.LoadFile();
-
 	scheduler.simulate();
+	scheduler.SaveFile();
 }

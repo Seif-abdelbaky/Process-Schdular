@@ -28,6 +28,12 @@ class Scheduler
 		int fork;
 		int TotalProcess;
 		int mode;
+		int processRTF = 0;
+		int processMaxW = 0;
+		int processStolen = 0;
+		int processForked = 0;
+		int processKilled = 0;
+		int TotalTime = 0;
 		LinkedQueue<Process*> ProcessNew;
 		LinkedQueue<Process*> ProcessTer;
 		LinkedQueue<Process*> ProcessBlk;
@@ -216,13 +222,55 @@ class Scheduler
 		}
 
 		void SaveFile() {
-			string filename = "Input.txt";
-			ofstream outputFile(filename,ios::app); // Open file for output
+			string filename = "Output.txt";
+			ofstream out(filename); // Open file for output
+			int totalWaiting = 0;
+			int totalRespone = 0;
+			int totalTurnRound = 0;
+			out << "TT  PID  AT  CT  IO_D    WT  RT  TRT" << '\n';
+			while (!ProcessTer.isEmpty()) {
+				Process* pro;
+				ProcessTer.dequeue(pro);
+				totalWaiting += pro->getWaitingTime();
+				totalRespone += pro->getResponseTime();
+				totalTurnRound += pro->getTurnRoundTime();
+				out << pro->getTerminationTime() << "  "
+					<< pro->getPid() << "  "
+					<< pro->getArrivalTime() << "  "
+					<< pro->getCPUTime() << "  "
+					<< pro->get_io_d() << "    "
+					<< pro->getWaitingTime() << "  "
+					<< pro->getResponseTime() << "  "
+					<< pro->getTurnRoundTime() << "\n";
+			}
+			
+			out << '\n';
+			out << "Processes: "<< TotalProcess <<'\n';
+			out << "Avg WT = " << totalWaiting / TotalProcess << ",   ";
+			out << "Avg RT = " << totalRespone / TotalProcess << ",   ";
+			out << "Avg TRT = " << totalTurnRound / TotalProcess << ",   \n";
+			out << "Migration %:     RTF = " << processRTF * 100 / TotalProcess << "%, \t"
+				<< "MaxW = "<<processMaxW*100/ TotalProcess<<"%\n";
+			out << "Work Steal: " << processStolen*100 / TotalProcess << "%\n";
+			out << "Forked Process: " << processForked * 100 / TotalProcess << "%\n";
+			out << "Killed Process: " << processKilled * 100 / TotalProcess << "%\n";
+			out << '\n';
 
-			string data = "Hello, world!";
-			outputFile << data << endl; // Write data to file
-
-			outputFile.close();
+			out << "Processors: " << TotalProcessors << " [" << NF << " FCFS, " << NS << " SJF, " << NR << " RR]\n";
+			out << "Processors Load\n";
+			for (int i = 0; i < TotalProcessors; i++) {
+				out << "p" << (i + 1) << "=" << processors[i]->getTotalBusy() * 100 / totalTurnRound<<"%,  ";
+			}
+			out << "\n \n";
+			out << "Proxessors Utiliz\n";
+			int TotalUtilization = 0;
+			for (int i = 0; i < TotalProcessors; i++) {
+				TotalUtilization += processors[i]->getTotalBusy() * 100 / TotalTime;
+				out << "p" << (i + 1) << "=" << processors[i]->getTotalBusy() * 100 / TotalTime << "%,  ";
+			}
+			out << "\n";
+			out << "Avg utilization = " << TotalUtilization / TotalProcessors<<"%\n";
+			out.close();
 		}
 		void steal()
 		{
@@ -243,6 +291,7 @@ class Scheduler
 					break;
 				processors[min]->AddtoQ(ptr);
 				cout << "SOMETHING WAS STOLEN\n";
+				processStolen++;
 				if (processors[max]->EmptyReady())
 					break;
 				percentage = float(processors[max]->TimeLeftReady() - processors[min]->TimeLeftReady()) / float(processors[max]->TimeLeftReady());
@@ -252,7 +301,8 @@ class Scheduler
 			if (mode == 3)
 				tool.generate_silent();
 			int Assassin = 1 + rand() % TotalProcess;
-			for (int i = 1; ; i++) {
+			int i;
+			for (i = 1; ; i++) {
 				if (i % STL == 0)
 					steal();
 				//cout << i <<": " ;
@@ -295,6 +345,7 @@ class Scheduler
 									pro->setTerminationTime(i);
 									ProcessTer.enqueue(pro);
 									ProcessKill.dequeue(kill);
+									processKilled++;
 								}
 								if (pro)
 								{
@@ -313,6 +364,7 @@ class Scheduler
 												cont = true;
 												pro = temp;
 												pro->setTerminationTime(i);
+												processKilled++;
 												break;
 											}
 										}
@@ -327,6 +379,7 @@ class Scheduler
 							int forkindex = get_min(0, NF);
 							processors[forkindex]->AddtoQ(forkPtr);
 							TotalProcess++;
+							processForked++;
 						}
 						int done = processors[j]->Run(pro, i);
 						if (done == 5)	/// Migration to SJF;
@@ -336,6 +389,7 @@ class Scheduler
 								processors[index]->AddtoQ(pro);
 								done = processors[j]->Run(pro, i);
 								cout << "MIGRATION TO SJF\n";
+								processRTF++;
 							} while (done == 5);
 						}
 						if (done == 4)	/// Migration to RR;
@@ -345,6 +399,7 @@ class Scheduler
 								processors[index]->AddtoQ(pro);
 								done = processors[j]->Run(pro, i);
 								cout << "MIGRATION TO RR\n";
+								processMaxW++;
 							} while (done == 4);
 						}
 						if (done == 1) {
@@ -363,7 +418,8 @@ class Scheduler
 										ProcessTer.enqueue(temp);
 										cont = true;
 										pro = temp;
-										pro->setTerminationTime(i);
+										pro->setTerminationTime(i+1);
+										processKilled++;
 										break;
 									}
 								}
@@ -383,6 +439,7 @@ class Scheduler
 					break;
 			}
 
+			TotalTime = i;
 		}
 		bool updateInterface(int i)
 		{

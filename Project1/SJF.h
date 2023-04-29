@@ -83,7 +83,7 @@ public:
 						return 2;
 					}
 				}
-
+				TotalBusy++;
 				runPtr->setTimeLeft(runPtr->getTimeLeft() - 1);
 				if (runPtr->getnIO() == nullptr)
 				{
@@ -109,7 +109,7 @@ public:
 				{
 					busy = false;
 					done = runPtr;
-					runPtr->setTerminationTime(TS);
+					runPtr->setTerminationTime(TS+1);
 					runPtr = nullptr;
 					return 1;
 				}
