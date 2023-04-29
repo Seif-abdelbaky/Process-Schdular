@@ -239,7 +239,7 @@ class Scheduler
 				out << pro->getTerminationTime() << "  "
 					<< pro->getPid() << "  "
 					<< pro->getArrivalTime() << "  "
-					<< pro->getCPUTime() << "  "
+					<< pro->getCPUTime()-pro->getTimeLeft() << "  "
 					<< pro->get_io_d() << "    "
 					<< pro->calcWaitingTime() << "  "
 					<< pro->getResponseTime() << "  "

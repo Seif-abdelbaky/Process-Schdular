@@ -194,7 +194,7 @@ public:
 		{
 			child = new Process();
 			child->setTimeLeft(this->getTimeLeft() );
-			
+			child->setCPUTime(this->getTimeLeft());
 			child->setPid(this->getPid() + 1000000);
 			child->setArrivalTime(T);
 			temp = child;
