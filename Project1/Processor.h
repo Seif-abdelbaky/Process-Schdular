@@ -35,6 +35,13 @@ public:
 	void virtual setTimeLeftInQueue(int t) = 0;
 	bool virtual SigKill(Process*& Killed, int idKilled,bool & hasChildren) = 0;
 	bool virtual fork(int T,Process*&forkPtr) = 0;
+	int virtual getter_total()
+	{
+		int x = 0;
+		if (runPtr)
+			x = runPtr->getTimeLeft();
+		return TimeLeftInQueue + x;
+	}
 	int virtual getTimeLeftInQueue() 
 	{
 		int count = 0;
@@ -70,7 +77,7 @@ public:
 	{
 		bool flag = readyQ->enqueue(x);
 		if (flag)
-			TimeLeftInQueue += x->getCPUTime();
+			TimeLeftInQueue += x->getTimeLeft();
 		return(flag);
 	}
 	void virtual printRDY() = 0;
@@ -84,6 +91,7 @@ public:
 			if (noNeed)
 			{
 				readyQ->dequeue(ptr);
+				TimeLeftInQueue -= ptr->getTimeLeft();
 			}
 			else
 			{
@@ -95,6 +103,7 @@ public:
 					if (!x->isChild() && ptr == nullptr)
 					{
 						ptr = x;
+						TimeLeftInQueue -= ptr->getTimeLeft();
 					}
 					else
 						temp.enqueue(x);

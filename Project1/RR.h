@@ -53,6 +53,7 @@ public:
 			busy = true;
 			runPtr->setResponseTime(TS - runPtr->getArrivalTime());
 			runPtr->setWaitingTime(TS - runPtr->getArrivalTime() + runPtr->getTimeLeft() - runPtr->getCPUTime());
+			TimeLeftInQueue -= runPtr->getTimeLeft();
 			if (runPtr->getTimeLeft() < RTF)
 			{
 				busy = false;
@@ -144,6 +145,7 @@ public:
 					{
 						Process* temp = runPtr;
 						readyQ->enqueue(temp);
+						TimeLeftInQueue += temp->getTimeLeft();
 						runPtr = nullptr;
 						busy = false;
 					}

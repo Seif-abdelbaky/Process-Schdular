@@ -81,6 +81,8 @@ public:
 			{
 				cout << "processor " << i + 1 << " ";
 				arr[i]->printRDY();
+				cout << "USING GETTER:" << arr[i]->getter_total() << "    ";
+				cout << "USing Brute Force: " << arr[i]->getTimeLeftInQueue() << endl;
 			}
 		}
 	}

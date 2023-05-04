@@ -40,6 +40,7 @@ public:
 			busy = true;
 			runPtr->setResponseTime(TS-runPtr->getArrivalTime());
 			runPtr->setWaitingTime(TS-runPtr->getArrivalTime()+runPtr->getTimeLeft()-runPtr->getCPUTime());
+			TimeLeftInQueue -= runPtr->getTimeLeft();
 			if (runPtr->get_WaitingTime() > MaxW && !runPtr->isChild())
 			{
 				busy = false;
@@ -233,6 +234,7 @@ public:
 			if (TempPtr->getPid() == idKilled && Killed == nullptr)
 			{
 				Killed = TempPtr;
+				TimeLeftInQueue -= Killed->getTimeLeft();
 			}
 			else
 			{

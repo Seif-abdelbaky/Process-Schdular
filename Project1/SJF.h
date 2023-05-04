@@ -38,6 +38,7 @@ public:
 			busy = true;
 			runPtr->setResponseTime(TS - runPtr->getArrivalTime());
 			runPtr->setWaitingTime(TS - runPtr->getArrivalTime() + runPtr->getTimeLeft() - runPtr->getCPUTime());
+			TimeLeftInQueue -= runPtr->getTimeLeft();
 		}
 		if (runPtr)
 		{
