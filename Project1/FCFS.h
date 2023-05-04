@@ -40,6 +40,13 @@ public:
 			busy = true;
 			runPtr->setResponseTime(TS-runPtr->getArrivalTime());
 			runPtr->setWaitingTime(TS-runPtr->getArrivalTime()+runPtr->getTimeLeft()-runPtr->getCPUTime());
+			if (runPtr->get_WaitingTime() > MaxW && !runPtr->isChild())
+			{
+				busy = false;
+				done = runPtr;
+				runPtr = nullptr;
+				return 4; ///// goes to shortest RR Q
+			}
 		}
 		if (runPtr)
 		{
@@ -97,13 +104,6 @@ public:
 						runPtr = nullptr;
 						return 2;
 					}
-				}
-				if (runPtr ->get_WaitingTime() > MaxW && !runPtr->isChild())
-				{
-					busy = false;
-					done = runPtr;
-					runPtr = nullptr;
-					return 4; ///// goes to shortest RR Q
 				}
 				TotalBusy++;
 				runPtr->setTimeLeft(runPtr->getTimeLeft() - 1);
@@ -203,7 +203,7 @@ public:
 			Process* x;
 			readyQ->dequeue(x);
 			temp.enqueue(x);
-			count++;
+			count++; 
 		}
 		while (!temp.isEmpty())
 		{

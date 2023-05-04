@@ -437,6 +437,8 @@ class Scheduler
 											processors[index]->AddtoQ(temp);
 										}
 									}
+									else
+										break;
 								}
 							
 							}

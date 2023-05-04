@@ -53,6 +53,13 @@ public:
 			busy = true;
 			runPtr->setResponseTime(TS - runPtr->getArrivalTime());
 			runPtr->setWaitingTime(TS - runPtr->getArrivalTime() + runPtr->getTimeLeft() - runPtr->getCPUTime());
+			if (runPtr->getTimeLeft() < RTF)
+			{
+				busy = false;
+				done = runPtr;
+				runPtr = nullptr;
+				return 5; ///// goes to shortest SJF Q
+			}
 			
 		}
 		if (runPtr)
@@ -112,13 +119,7 @@ public:
 						return 2;		////// goes to block
 					}
 				}
-				if (runPtr->getTimeLeft() < RTF)
-				{
-					busy = false;
-					done = runPtr;
-					runPtr = nullptr;
-					return 5; ///// goes to shortest SJF Q
-				}
+
 				TotalBusy++;
 				runPtr->setTimeLeft(runPtr->getTimeLeft() - 1);
 				if (runPtr->getTimeLeft() > 0)
