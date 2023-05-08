@@ -13,7 +13,6 @@
 #include <cstdlib>
 #include <time.h>
 #include"SignKill.h"
-#include<map>
 using namespace std;
 class Scheduler
 {
@@ -44,7 +43,6 @@ class Scheduler
 		int TotalProcessors;
 		int currentProcessor = 0;
 		UI tool;
-		map<int, int> processLocation;
 	public:
 		void killchildren(Process* subroot,int T)
 		{
@@ -185,7 +183,6 @@ class Scheduler
 					///////////// throws the ptr to the queue with least time
 					int index = get_min(0, processorsCount);
 					processors[index]->AddtoQ(ptr);
-					processLocation[ptr->getPid()] = index;
 
 				}
 			}
@@ -340,7 +337,7 @@ class Scheduler
 					/*while (!flag) {
 						flag = processors[currentProcessor++]->AddtoQ(cur);
 					}*/	
-					processLocation[cur->getPid()] = index;
+
 					/*if (currentProcessor == TotalProcessors) {
 						currentProcessor = 0;
 					}*/
