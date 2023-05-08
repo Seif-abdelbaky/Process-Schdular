@@ -30,24 +30,24 @@ public:
 	{
 		cout << "-------------- BLK processes --------------" << endl;
 		string str;
-		cout << count(queue) << " BLK: ";
-		print(queue);
+		cout << queue.count() << " BLK: ";
+		queue.print();
 	}
 	template <class T>
 	void generateRDY(int x, string str, LinkedQueue <T>*& queue)
 	{
 		cout << "processor" << x << "[" << str << "]:" << endl;
 
-		cout << " RDY: " << count(queue);
-		print(queue);
+		cout << " RDY: " << queue.count();
+		queue.print();
 	}
 	template <class T>
 	void generateTRM(LinkedQueue <T>& queue)
 	{
 		cout << "-------------- TRM processes --------------" << endl;
 		string str;
-		cout << count(queue) << " TRM: ";
-		print(queue);
+		cout << queue.count() << " TRM: ";
+		queue.print();
 
 	}
 	void next(int mode)

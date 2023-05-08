@@ -302,13 +302,14 @@ class Scheduler
 			bool NoNeed = false;
 			int min = get_min_ready(0, processorsCount);
 			int max = get_max_ready(0, processorsCount);
-			if (min < NF && max < NF)
+			if (min < NF && max < NF)//// Stealing from FCFS to FCFS (can steal children ) ## old version
 				NoNeed = true;
-			if (max >= NF)
+			if (max >= NF)	//// There is already no forked processes in RR or SJF Qs
 				NoNeed = true;
 			if (processors[max]->TimeLeftReady() == 0)
 				return;
 			float percentage = float(processors[max]->TimeLeftReady() - processors[min]->TimeLeftReady()) / float(processors[max]->TimeLeftReady());
+			NoNeed = false; ////// won't steal any forked processes ## document update
 			while (percentage > 0.4)
 			{
 				Process* ptr = processors[max]->gimme_something(NoNeed);
@@ -497,14 +498,14 @@ class Scheduler
 				tool.printRunning(processors, processorsCount);
 				tool.generateTRM(ProcessTer);
 
-				if (count(ProcessTer) == TotalProcess)
+				if (ProcessTer.count() == TotalProcess)
 				{
 					cout << "Simulation ends, Output File Created" << endl;
 					return true;
 				}
 				tool.next(mode);
 			}
-			if (count(ProcessTer) == TotalProcess)
+			if (ProcessTer.count() == TotalProcess)
 			{
 				cout << "Simulation ends, Output File Created" << endl;
 				return true;

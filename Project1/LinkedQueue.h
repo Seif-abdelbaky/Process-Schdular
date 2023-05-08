@@ -67,21 +67,21 @@ public :
 
 	//copy constructor
 	LinkedQueue(const LinkedQueue<T> & LQ);
-	friend int count(LinkedQueue<T>& zis)
+	int count()
 	{
-		if (zis.isEmpty())
+		if (this->isEmpty())
 			return 0;
 		LinkedQueue <T> temp;
 		int count = 0;
 		T x;
-		zis.dequeue(x);
+		this->dequeue(x);
 		temp.enqueue(x);
 		count++;
 		
-		while (!zis.isEmpty())
+		while (!this->isEmpty())
 		{
 			T x;
-			zis.dequeue(x);
+			this->dequeue(x);
 			temp.enqueue(x);
 			count++;
 
@@ -91,27 +91,27 @@ public :
 		{
 			T x;
 			temp.dequeue(x);
-			zis.enqueue(x);
+			this->enqueue(x);
 		}
 		return count;
 
 	}
-	friend void print(LinkedQueue<T> & zis)
+	void print()
 	{
-		if (zis.isEmpty())
+		if (this->isEmpty())
 		{
 			cout << endl;
 			return;
 		}
 		LinkedQueue <T> temp;
 		T x;
-		zis.dequeue(x);
+		this->dequeue(x);
 		temp.enqueue(x);
 		cout << x;
-		while (!zis.isEmpty())
+		while (!this->isEmpty())
 		{
 			T x;
-			zis.dequeue(x);
+			this->dequeue(x);
 			temp.enqueue(x);
 			cout << ", " << x;
 
@@ -120,7 +120,7 @@ public :
 		{
 			T x;
 			temp.dequeue(x);
-			zis.enqueue(x);
+			this->enqueue(x);
 		}
 		cout << endl;
 
