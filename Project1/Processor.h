@@ -44,9 +44,12 @@ public:
 	}
 	int virtual getTimeLeftInQueue() 
 	{
-		int count = 0;
+		return getter_total();
+		///// brute force
+		/*int count = 0;
 		if (runPtr)
 			count += runPtr->getTimeLeft();
+
 		LinkedQueue<Process*> temp;
 		if (readyQ->isEmpty())
 		{
@@ -70,7 +73,7 @@ public:
 			temp.dequeue(x);
 			readyQ->enqueue(x);
 		}
-		return count;
+		return count; */
 	}
 	virtual QueueADT<Process*>*  getReadyQ() = 0;
 	bool virtual AddtoQ(Process* x)

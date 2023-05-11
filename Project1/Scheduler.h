@@ -313,7 +313,7 @@ class Scheduler
 				if (ptr == nullptr)
 					break;
 				processors[min]->AddtoQ(ptr);
-				cout << "SOMETHING WAS STOLEN\n";
+				//cout << "SOMETHING WAS STOLEN\n";
 				processStolen++;
 				if (processors[max]->EmptyReady())
 					break;
@@ -357,14 +357,14 @@ class Scheduler
 							ProcessKill.peek(kill);
 							if (kill.Time < i) {
 								ProcessKill.dequeue(kill);
-								cout << "passed: " << kill.ID << endl;
+								//cout << "passed: " << kill.ID << endl;
 							}
 							if (kill.Time == i) {
 								bool hasChildren = false;
 								bool Killed = processors[j]->SigKill(pro, kill.ID, hasChildren);
 								if (Killed)
 								{
-									cout << "KILLED: " << kill.ID << endl;
+									//cout << "KILLED: " << kill.ID << endl;
 									pro->setTerminationTime(i);
 									ProcessTer.enqueue(pro);
 									ProcessKill.dequeue(kill);
@@ -401,7 +401,7 @@ class Scheduler
 							}
 							if (j >= NF || counter < NF - 1)
 							{
-								cout << "OVERHEATED << " << j + 1 << endl;
+								//cout << "OVERHEATED << " << j + 1 << endl;
 								Process* temp = nullptr;
 								processors[j]->overHeat(temp);
 								if (temp != nullptr)
@@ -449,7 +449,7 @@ class Scheduler
 								int index = get_min(NF, NF + NS);
 								processors[index]->AddtoQ(pro);
 								done = processors[j]->Run(pro, i);
-								cout << "MIGRATION TO SJF\n";
+								//cout << "MIGRATION TO SJF\n";
 								processRTF++;
 							} while (done == 5);
 						}
@@ -459,7 +459,7 @@ class Scheduler
 								int index = get_min(NF + NS, processorsCount);
 								processors[index]->AddtoQ(pro);
 								done = processors[j]->Run(pro, i);
-								cout << "MIGRATION TO RR\n";
+								//cout << "MIGRATION TO RR\n";
 								processMaxW++;
 							} while (done == 4);
 						}

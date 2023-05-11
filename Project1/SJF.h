@@ -26,7 +26,7 @@ public:
 			waiting++;
 			if (waiting >= CoolingT)
 			{
-				cout << "COOOOOOLED" << endl;
+				//cout << "COOOOOOLED" << endl;
 				overHeated = false;
 				waiting = 0;
 			}
