@@ -152,7 +152,7 @@ public:
 					
 
 				}
-				else
+				else  // Ya rab mnwslsh hena
 				{
 					busy = false;
 					done = runPtr;

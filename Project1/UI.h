@@ -81,6 +81,7 @@ public:
 			{
 				cout << "processor " << i + 1 << " ";
 				arr[i]->printRDY();
+				//cout << "USing Brute Force: " << arr[i]->TimeLeftReady() << endl;
 			}
 		}
 	}

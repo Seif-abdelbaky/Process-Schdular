@@ -73,7 +73,7 @@ public:
 			temp.dequeue(x);
 			readyQ->enqueue(x);
 		}
-		return count; */
+		return count;*/
 	}
 	virtual QueueADT<Process*>*  getReadyQ() = 0;
 	bool virtual AddtoQ(Process* x)

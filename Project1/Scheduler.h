@@ -294,6 +294,61 @@ class Scheduler
 			out << "Avg utilization = " << TotalUtilization / TotalProcessors<<"%\n";
 			out.close();
 		}
+		void overheat(int j) // overheats processor J
+		{
+			int counter = 0;
+			if (j < NF)
+			{
+
+				for (int ii = 0; ii < NF; ii++)
+				{
+					if (processors[ii]->isHeated())
+						counter++;
+				}
+
+			}
+			if (j >= NF || counter < NF - 1)	// can't overheat all fcfs processors (assumption)
+			{
+				//cout << "OVERHEATED << " << j + 1 << endl;
+				Process* temp = nullptr;
+				processors[j]->overHeat(temp);
+				if (temp != nullptr)
+				{
+					if (temp->isChild())
+					{
+						int index = get_min(0, NF);
+						processors[index]->AddtoQ(temp);
+					}
+					else
+					{
+						int index = get_min(0, processorsCount);
+						processors[index]->AddtoQ(temp);
+					}
+				}
+
+				while (!processors[j]->EmptyReady())
+				{
+					Process* temp;
+					temp = processors[j]->gimme_something(true);
+					if (temp != nullptr)
+					{
+						if (temp->isChild())
+						{
+							int index = get_min(0, NF);
+							processors[index]->AddtoQ(temp);
+						}
+						else
+						{
+							int index = get_min(0, processorsCount);
+							processors[index]->AddtoQ(temp);
+						}
+					}
+					else
+						break;
+				}
+
+			}
+		}
 		void steal()
 		{
 			bool NoNeed = false;
@@ -303,6 +358,7 @@ class Scheduler
 				NoNeed = true;
 			if (max >= NF)	//// There is already no forked processes in RR or SJF Qs
 				NoNeed = true;
+
 			if (processors[max]->TimeLeftReady() == 0)
 				return;
 			float percentage = float(processors[max]->TimeLeftReady() - processors[min]->TimeLeftReady()) / float(processors[max]->TimeLeftReady());
@@ -313,7 +369,7 @@ class Scheduler
 				if (ptr == nullptr)
 					break;
 				processors[min]->AddtoQ(ptr);
-				//cout << "SOMETHING WAS STOLEN\n";
+				//cout << "SOMETHING WAS STOLEN from " << max + 1 << "to " << min + 1 << endl;
 				processStolen++;
 				if (processors[max]->EmptyReady())
 					break;
@@ -326,26 +382,16 @@ class Scheduler
 			int Assassin = 1 + rand() % TotalProcess;
 			int i;
 			for (i = 1; ; i++) {
-				if (i % STL == 0)
-					steal();
-				//cout << i <<": " ;
 				Process* cur;
 				bool isNotEmpty= ProcessNew.peek(cur);
 				while (isNotEmpty && cur->getArrivalTime() == i) {
 					int index = get_min(0, TotalProcessors);
 					bool flag = processors[index]->AddtoQ(cur);
-					/*while (!flag) {
-						flag = processors[currentProcessor++]->AddtoQ(cur);
-					}*/	
-
-					/*if (currentProcessor == TotalProcessors) {
-						currentProcessor = 0;
-					}*/
-					
 					ProcessNew.dequeue(cur);
 					isNotEmpty = ProcessNew.peek(cur);
 				}
-				
+				if (i % STL == 0)
+					steal();
 				for (int j = 0; j < TotalProcessors; j++) {
 					Process* pro;
 					if (processors[j])
@@ -388,58 +434,7 @@ class Scheduler
 						int overheating_prob = 1 + rand() % 100;
 						if (overheating_prob < 2 && !processors[j]->isHeated())
 						{
-							int counter = 0;
-							if (j < NF)
-							{
-								
-								for (int ii = 0; ii < NF; ii++)
-								{
-									if (processors[ii]->isHeated())
-										counter++;
-								}
-								
-							}
-							if (j >= NF || counter < NF - 1)
-							{
-								//cout << "OVERHEATED << " << j + 1 << endl;
-								Process* temp = nullptr;
-								processors[j]->overHeat(temp);
-								if (temp != nullptr)
-								{
-									if (temp->isChild())
-									{
-										int index = get_min(0, NF);
-										processors[index]->AddtoQ(temp);
-									}
-									else
-									{
-										int index = get_min(0, processorsCount);
-										processors[index]->AddtoQ(temp);
-									}
-								}
-
-								while (!processors[j]->EmptyReady())
-								{
-									Process* temp;
-									temp = processors[j]->gimme_something(true);
-									if (temp != nullptr)
-									{
-										if (temp->isChild())
-										{
-											int index = get_min(0, NF);
-											processors[index]->AddtoQ(temp);
-										}
-										else
-										{
-											int index = get_min(0, processorsCount);
-											processors[index]->AddtoQ(temp);
-										}
-									}
-									else
-										break;
-								}
-							
-							}
+							overheat(j);
 							
 						}
 						int done = processors[j]->Run(pro, i);
