@@ -252,7 +252,7 @@ void Scheduler::SaveFile() {
 		out << "p" << (i + 1) << "=" << processors[i]->getTotalBusy() * 100 / TotalTime << "%,  ";
 	}
 	out << "\n";
-	out << "Avg utilization = " << TotalUtilization / TotalProcessors << "%\n";
+	out << "Avg utilization = " << (((TotalUtilization * 10) / TotalProcessors) / 10.0) << "%\n";
 	out.close();
 }
 
