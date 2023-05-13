@@ -205,7 +205,7 @@ bool SJF::SigKill(Process*& Killed, int idKilled, bool& hasChildren)
 	return false;
 }
 
-bool SJF::fork(int T, Process*& forkPtr)
+bool SJF::fork(int T, Process*& forkPtr, int TotalProcess)
 {
 	return false;
 }

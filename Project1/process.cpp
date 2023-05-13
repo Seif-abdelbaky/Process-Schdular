@@ -189,7 +189,7 @@ void Process::PrintAll() {
 	cout << "Arival: " << ArrivalT << ", PID: " << Pid << ", CPU Time: " << cpuT << ", IOs: " << IO_n << endl;
 }
 
-void Process::ForkProcess(Process*& temp, int T)
+void Process::ForkProcess(Process*& temp, int T, int TotalProcess)
 {
 	if (!child || !secondChild)
 	{
@@ -198,7 +198,7 @@ void Process::ForkProcess(Process*& temp, int T)
 			child = new Process();
 			child->setTimeLeft(this->getTimeLeft());
 			child->setCPUTime(this->getTimeLeft());
-			child->setPid(this->getPid() + 100000);
+			child->setPid(TotalProcess + 1);
 			child->setArrivalTime(T);
 			temp = child;
 			child->set_child(true);
@@ -208,7 +208,7 @@ void Process::ForkProcess(Process*& temp, int T)
 			secondChild = new Process();
 			secondChild->setTimeLeft(this->getTimeLeft());
 			secondChild->setCPUTime(this->getTimeLeft());
-			secondChild->setPid(this->getPid() + 1000000);
+			secondChild->setPid(TotalProcess + 1);
 			secondChild->setArrivalTime(T);
 			temp = secondChild;
 			secondChild->set_child(true);

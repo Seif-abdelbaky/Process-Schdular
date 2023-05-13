@@ -52,7 +52,7 @@ class Scheduler
 		int get_max_ready(int start, int end);
 		void runBLK(int timestep);
 		void LoadFile();
-
+		void sigkill(int i);
 		void SaveFile();
 		void overheat(int j);
 		void steal();

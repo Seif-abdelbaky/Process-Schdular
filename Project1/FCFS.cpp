@@ -244,12 +244,12 @@ void FCFS::setBusy(bool b)
 	 return false;
  }
 
-bool FCFS::fork(int T, Process*& forkPtr)
+bool FCFS::fork(int T, Process*& forkPtr, int TotalProcess)
  {
 	 if (runPtr)
 	 {
 
-		 runPtr->ForkProcess(forkPtr, T);
+		 runPtr->ForkProcess(forkPtr, T, TotalProcess);
 		 if (forkPtr)
 		 {
 

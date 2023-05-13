@@ -20,7 +20,7 @@ public:
 	bool virtual isBusy() = 0;
 	void virtual setTimeLeftInQueue(int t) = 0;
 	bool virtual SigKill(Process*& Killed, int idKilled,bool & hasChildren) = 0;
-	bool virtual fork(int T,Process*&forkPtr) = 0;
+	bool virtual fork(int T,Process*&forkPtr, int TotalProcess) = 0;
 	int virtual getter_total();
 	int virtual getTimeLeftInQueue();
 	bool virtual AddtoQ(Process* x);

@@ -339,7 +339,38 @@ void Scheduler::steal()
 		percentage = float(processors[max]->TimeLeftReady() - processors[min]->TimeLeftReady()) / float(processors[max]->TimeLeftReady());
 	}
 }
+void Scheduler::sigkill(int i)
+{
+	if (!ProcessKill.isEmpty()) {
 
+		SignKill kill;
+		ProcessKill.peek(kill);
+		if (kill.Time < i) {
+			ProcessKill.dequeue(kill);
+			//cout << "passed: " << kill.ID << endl;
+		}
+		while (kill.Time == i) {
+			Process* pro = nullptr;
+			bool hasChildren = false;
+			for (int j = 0; j < processorsCount; j++)
+			{
+				bool Killed = processors[j]->SigKill(pro, kill.ID, hasChildren);
+				if (Killed)
+				{
+					pro->setTerminationTime(i);
+					ProcessTer.enqueue(pro);
+					processKilled++;
+					killchildren(pro, i);
+					break;
+				}
+			}
+			ProcessKill.dequeue(kill);
+			if (ProcessKill.isEmpty())
+				break;
+			ProcessKill.peek(kill);
+		}
+	}
+}
 void Scheduler::simulate() {
 	if (mode == 3)
 		tool.generate_silent();
@@ -356,39 +387,17 @@ void Scheduler::simulate() {
 		}
 		if (i % STL == 0)
 			steal();
+		sigkill(i);
 		for (int j = 0; j < TotalProcessors; j++) {
 			Process* pro;
 			if (processors[j])
 			{
 				//cout << processors[j]->getTimeLeftInQueue() << " ";
 
-				if (!ProcessKill.isEmpty()) {
-					SignKill kill;
-					ProcessKill.peek(kill);
-					if (kill.Time < i) {
-						ProcessKill.dequeue(kill);
-						//cout << "passed: " << kill.ID << endl;
-					}
-					if (kill.Time == i) {
-						bool hasChildren = false;
-						bool Killed = processors[j]->SigKill(pro, kill.ID, hasChildren);
-						if (Killed)
-						{
-							//cout << "KILLED: " << kill.ID << endl;
-							pro->setTerminationTime(i);
-							ProcessTer.enqueue(pro);
-							ProcessKill.dequeue(kill);
-							processKilled++;
-						}
-						if (pro)
-						{
-							killchildren(pro, i);
-						}
-					}
-				}
+				
 				int fork_probability = 1 + rand() % 100;
 				Process* forkPtr = nullptr;
-				if (fork_probability <= fork && processors[j]->fork(i, forkPtr))
+				if (fork_probability <= fork && processors[j]->fork(i, forkPtr, TotalProcess))
 				{
 					int forkindex = get_min(0, NF);
 					processors[forkindex]->AddtoQ(forkPtr);

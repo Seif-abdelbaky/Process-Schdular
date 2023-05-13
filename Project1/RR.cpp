@@ -233,7 +233,7 @@ void RR::printRDY()
 	 return false;
  }
 
-   bool RR::fork(int T, Process*& forkPtr)
+   bool RR::fork(int T, Process*& forkPtr, int TotalProcess)
   {
 	  return false;
   }

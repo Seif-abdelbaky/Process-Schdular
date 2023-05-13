@@ -67,7 +67,7 @@ public:
 		return out;
 		
 	}
-	void ForkProcess(Process*& temp, int T);
+	void ForkProcess(Process*& temp, int T, int TotalProcess);
 	bool isParent();
 	Process*& getChild();
 	Process*& getSecondChild();

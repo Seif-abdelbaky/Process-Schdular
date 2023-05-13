@@ -17,7 +17,7 @@ public:
 	void printRDY();
 	int countRDY();
 	bool SigKill(Process*& Killed, int idKilled, bool& hasChildren);
-	bool fork(int T, Process*& forkPtr);
+	bool fork(int T, Process*& forkPtr, int TotalProcess);
 	~FCFS();
 };
 
