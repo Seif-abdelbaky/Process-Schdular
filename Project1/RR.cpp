@@ -39,6 +39,7 @@ int RR::ScheduleALGO(Process*& done, int TS)
 		readyQ->dequeue(runPtr);
 		busy = true;
 		runPtr->setResponseTime(TS - runPtr->getArrivalTime());
+		runPtr->setResponseProcessor(TS);
 		runPtr->setWaitingTime(TS - runPtr->getArrivalTime() + runPtr->getTimeLeft() - runPtr->getCPUTime());
 		TimeLeftInQueue -= runPtr->getTimeLeft();
 		if (runPtr->getTimeLeft() < RTF)
@@ -128,7 +129,7 @@ int RR::ScheduleALGO(Process*& done, int TS)
 						return 2;
 					}
 				}
-				if (runPtr->getTimeLeft() > 0 && TimeSlice != 0 && (TS + 1 - runPtr->getResponseTime()) % TimeSlice == 0)
+				if (runPtr->getTimeLeft() > 0 && TimeSlice != 0 && (TS + 1 - runPtr->getresponseProcessor()) % TimeSlice == 0)
 				{
 					Process* temp = runPtr;
 					readyQ->enqueue(temp);

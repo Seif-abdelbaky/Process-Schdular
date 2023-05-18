@@ -1,6 +1,16 @@
 #include "process.h"
 
- Process::Process(int at, int pid, int ct, int IOn) {
+int Process::getresponseProcessor()
+{
+	return responseProcessor;
+}
+
+void Process::setResponseProcessor(int z)
+{
+	responseProcessor = z;
+}
+
+Process::Process(int at, int pid, int ct, int IOn) {
 	setArrivalTime(at);
 	setPid(pid);
 	setCPUTime(ct);
@@ -14,6 +24,7 @@
 	ischild = false;
 	IO_D = 0;
 	to_block = 0;
+	responseProcessor = 0;
 }
 
   int Process::get_to_block()

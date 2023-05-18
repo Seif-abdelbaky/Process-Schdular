@@ -22,7 +22,10 @@ class Process
 	bool ischild;
 	int IO_D;
 	int to_block;
+	int responseProcessor;	//changes everytime
 public:
+	int getresponseProcessor();
+	void setResponseProcessor(int z);
 	Process(int at = 0, int pid = 0, int ct = 0, int IOn = 0);
 	int get_to_block();
 	void set_blk(int x);

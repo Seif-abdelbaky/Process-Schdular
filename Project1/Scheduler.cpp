@@ -210,49 +210,55 @@ void Scheduler::SaveFile() {
 	int totalWaiting = 0;
 	int totalRespone = 0;
 	int totalTurnRound = 0;
-	out << "TT  PID  AT  CT  IO_D    WT  RT  TRT" << '\n';
+	out << "TT\tPID\tAT\tCT\tIO_D\tWT\tRT\tTRT" << '\n';
 	while (!ProcessTer.isEmpty()) {
 		Process* pro;
 		ProcessTer.dequeue(pro);
 		totalWaiting += pro->calcWaitingTime();
 		totalRespone += pro->getResponseTime();
 		totalTurnRound += pro->getTurnRoundTime();
-		out << pro->getTerminationTime() << "  "
-			<< pro->getPid() << "  "
-			<< pro->getArrivalTime() << "  "
-			<< pro->getCPUTime() << "  "
-			<< pro->get_io_d() << "    "
-			<< pro->calcWaitingTime() << "  "
-			<< pro->getResponseTime() << "  "
+		out << pro->getTerminationTime() << "\t"
+			<< pro->getPid() << "\t"
+			<< pro->getArrivalTime() << "\t"
+			<< pro->getCPUTime() << "\t"
+			<< pro->get_io_d() << "\t"
+			<< pro->calcWaitingTime() << "\t"
+			<< pro->getResponseTime() << "\t"
 			<< pro->getTurnRoundTime() << "\n";
 	}
-
+	out.precision(4);
 	out << '\n';
 	out << "Processes: " << TotalProcess << '\n';
 	out << "Avg WT = " << totalWaiting / TotalProcess << ",   ";
 	out << "Avg RT = " << totalRespone / TotalProcess << ",   ";
 	out << "Avg TRT = " << totalTurnRound / TotalProcess << ",   \n";
-	out << "Migration %:     RTF = " << processRTF * 100 / TotalProcess << "%, \t"
-		<< "MaxW = " << processMaxW * 100 / TotalProcess << "%\n";
-	out << "Work Steal: " << processStolen * 100 / TotalProcess << "%\n";
-	out << "Forked Process: " << processForked * 100 / TotalProcess << "%\n";
-	out << "Killed Process: " << processKilled * 100 / TotalProcess << "%\n";
+	out << "Migration %:     RTF = " << processRTF * 100.0 / TotalProcess << "%, \t"
+		<< "MaxW = " << processMaxW * 100.0 / TotalProcess << "%\n";
+	out << "Work Steal: " << processStolen * 100.0 / TotalProcess << "%\n";
+	out << "Forked Process: " << processForked * 100.0 / TotalProcess << "%\n";
+	out << "Killed Process: " << processKilled * 100.0 / TotalProcess << "%\n";
 	out << '\n';
 
 	out << "Processors: " << TotalProcessors << " [" << NF << " FCFS, " << NS << " SJF, " << NR << " RR]\n";
 	out << "Processors Load\n";
 	for (int i = 0; i < TotalProcessors; i++) {
-		out << "p" << (i + 1) << "=" << processors[i]->getTotalBusy() * 100 / totalTurnRound << "%,  ";
+		out << "p" << (i + 1) << "=" << processors[i]->getTotalBusy() * 100.0 / totalTurnRound << "%";
+		if (i < TotalProcessors - 1)
+			out << ",  ";
 	}
 	out << "\n \n";
 	out << "Processors Utiliz\n";
 	int TotalUtilization = 0;
 	for (int i = 0; i < TotalProcessors; i++) {
-		TotalUtilization += processors[i]->getTotalBusy() * 100 / TotalTime;
-		out << "p" << (i + 1) << "=" << processors[i]->getTotalBusy() * 100 / TotalTime << "%,  ";
+		TotalUtilization += processors[i]->getTotalBusy() * 100.0 / TotalTime;
+		{
+			out << "p" << (i + 1) << "=" << processors[i]->getTotalBusy() * 100.0 / TotalTime << "%";
+			if (i < TotalProcessors - 1)
+				out << ",  ";
+		}
 	}
 	out << "\n";
-	out << "Avg utilization = " << (((TotalUtilization * 10) / TotalProcessors) / 10.0) << "%\n";
+	out << "Avg utilization = " << (((TotalUtilization) / float(TotalProcessors))) << "%\n";
 	out.close();
 }
 
@@ -269,9 +275,34 @@ void Scheduler::overheat(int j) // overheats processor J
 		}
 
 	}
-	if (j >= NF || counter < NF - 1)	// can't overheat all fcfs processors (assumption)
+	if (j >= NF || counter < NF - 1)	// can't overheat all fcfs processors (assumption) because of forking
 	{
+		
 		//cout << "OVERHEATED << " << j + 1 << endl;
+		if (j >= NF && j < NF + NS)
+		{
+			int counter_sjf = 0;
+			for (int ii = NF; ii < NF + NS; ii ++) // cannot overheat all sjf for migration to SJF
+			{
+				
+				if (processors[ii]->isHeated())
+					counter_sjf++;
+			}
+			if (counter_sjf > NS - 2)
+				return;
+		}
+		else
+		{
+			int counter_RR = 0;
+			for (int ii = NF + NS; ii < TotalProcessors; ii++) // cannot overheat all RR for migration to RR
+			{
+
+				if (processors[ii]->isHeated())
+					counter_RR++;
+			}
+			if (counter_RR > NR - 2)
+				return;
+		}
 		Process* temp = nullptr;
 		processors[j]->overHeat(temp);
 		if (temp != nullptr)
